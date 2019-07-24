@@ -1,6 +1,6 @@
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent, FormEvent } from 'react';
 import { RouteComponentProps  } from 'react-router-dom';
-import { Grid, Button, TextField } from '@material-ui/core';
+import { Grid, Button, TextField, Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/styles';
 import { Auth } from '../../lib/auth';
 
@@ -20,7 +20,8 @@ class Auths extends React.Component<RouteComponentProps<{}> & AuthProps, AuthSta
       }
     },
     isValid: false,
-    isLoading: false
+    isLoading: false,
+    authFailed: false
   }
 
   componentDidMount(){
@@ -88,11 +89,29 @@ class Auths extends React.Component<RouteComponentProps<{}> & AuthProps, AuthSta
     })
   }
 
+  handleSubmit = (e: FormEvent)=>{
+    e.preventDefault();
+    let { username, password } = this.state.controls;
+    if(Auth.authenticate(username.value, password.value)){
+      this.props.history.push('/');
+    }else{
+      this.setState({ authFailed: true })
+    }
+  }
+
   render(){
     return (
       <Grid container className={this.props.classes.root} justify="center" direction="column" alignContent="center">
         <h1>Login</h1>
-        <form>
+        <form onSubmit={this.handleSubmit}>
+            {
+              this.state.authFailed ? 
+                <Typography 
+                  variant="subtitle1" 
+                  align="center" 
+                  color="error">Username or Password is invalid doc!</Typography> : 
+                null
+            }
             <TextField 
               className={this.props.classes.formControl} 
               type="text"
@@ -109,7 +128,7 @@ class Auths extends React.Component<RouteComponentProps<{}> & AuthProps, AuthSta
               value={this.state.controls.password.value} 
               error={(!this.state.controls.password.isValid && this.state.controls.password.isDirty)}
               label="Password" fullWidth />
-            <Button variant="contained"  color="primary" disabled={!this.state.isValid}>Login</Button>
+            <Button type="submit" variant="contained"  color="primary" disabled={!this.state.isValid}>Login</Button>
         </form>
       </Grid>
     )
@@ -135,6 +154,7 @@ interface AuthState{
     }
   },
   isValid: boolean,
+  authFailed: boolean,
   isLoading: boolean
 }
 
