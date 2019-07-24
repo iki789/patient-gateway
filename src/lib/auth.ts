@@ -1,7 +1,7 @@
 import jwt from 'jwt-simple';
 import { Users, IUser } from '../db';
 
-export class Auth implements IAuth{
+class Auth implements IAuth{
   isLoggedIn: boolean = false ;
   
   constructor(){
@@ -47,7 +47,12 @@ export class Auth implements IAuth{
   }
 }
 
-interface IAuth{
+
+let Singleton = new Auth();
+
+export { Singleton as Auth};
+
+export interface IAuth{
   authenticate: (username: string, password: string)=>boolean
   login: (user: IUser)=>IUser
   logout: ()=>void
