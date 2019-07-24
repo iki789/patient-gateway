@@ -1,7 +1,7 @@
 import React, { lazy, Suspense } from 'react';
 import { Grid } from '@material-ui/core';
 import { BrowserRouter, Route } from 'react-router-dom';
-const Auth = lazy(() => import('./components/Auth/index'));
+const Auth = lazy(() => import('./components/Auth'));
 
 const App: React.FC = () => {
   return (
