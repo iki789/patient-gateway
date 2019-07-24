@@ -1,21 +1,30 @@
-import React, { Component, PropsWithChildren } from 'react'
-import { Redirect } from 'react-router-dom';
+import React, { Component, PropsWithChildren, ComponentClass } from 'react'
+import { Redirect, withRouter,  } from 'react-router-dom';
 import { Auth } from '../../lib/auth';
 
-export default class ProtectedRoute extends Component<PropsWithChildren<any>> {
+// export default (ChildComponent: ComponentClass<RouteComponentProps & any>) =>{
+//   class ProtectedRoute extends Component {
+    
+//     componentDidMount(){
+//       if(!Auth.isLoggedIn){
+//         console.log("gg")
+//         return <Redirect to='/login' />
+//       }
+//     }
   
-  componentDidMount(){
-    let auth = new Auth();
-    if(!auth.isLoggedIn){
-      return <Redirect to='/login' />
-    }
-  }
+//     render() {
+//       return (
+//         <ChildComponent />
+//       )
+//     }
+//   }
+//   return ProtectedRoute;
+// }
 
-  render() {
-    return (
-      <React.Fragment>
-        {this.props.children}
-      </React.Fragment>
-    )
+export default (component: Component<any & React.ComponentType<any>>) =>{
+  if(!Auth.isLoggedIn){
+    console.log("gg")
+    console.log(component)   
   }
+  return component;
 }
