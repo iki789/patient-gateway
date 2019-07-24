@@ -1,30 +1,95 @@
-import React from 'react';
-import { Grid, Button, TextField, makeStyles } from '@material-ui/core';
+import React, { ChangeEvent } from 'react';
+import { Grid, Button, TextField } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 
-const Auth: React.FC  = () => {
-  const useStyles = makeStyles(theme => ({
+class Auths extends React.Component<AuthProps, AuthState>{
+
+  state: AuthState = {
+    controls:{
+      username: {
+        isValid: false,
+        isDirty: false,
+        value: ''
+      },
+      password: {
+        isValid: false,
+        isDirty: false,
+        value: ''
+      }
+    }
+  }
+
+  handleChange = (e: ChangeEvent<HTMLInputElement>)=>{
+    let { name, value } = e.target;
+    if(name === 'username' || name === 'password'){
+      this.setState({
+        controls:{
+          ...this.state.controls,
+          [name]:{
+            ...this.state.controls[name],
+            value
+          }
+        }
+      })
+    }
+  }
+
+  render(){
+    return (
+      <Grid container className={this.props.classes.root} justify="center" direction="column" alignContent="center">
+        <h1>Login</h1>
+        <form>
+            <TextField 
+              className={this.props.classes.formControl} 
+              type="text"
+              onChange={this.handleChange}
+              name="username"
+              value={this.state.controls.username.value} 
+              label="Username" fullWidth />
+            <TextField 
+              className={this.props.classes.formControl} 
+              type="password"
+              name="password"
+              onChange={this.handleChange}
+              value={this.state.controls.password.value} 
+              label="Password" fullWidth />
+            <Button variant="contained"  color="primary">Login</Button>
+        </form>
+      </Grid>
+    )
+  }
+}
+
+interface AuthProps{
+  classes: any
+}
+
+interface AuthState{
+  controls: {
+    username:{
+      isValid: boolean,
+      isDirty: boolean,
+      value: string
+    },
+    password:{
+      isValid: boolean,
+      isDirty: boolean,
+      value: string
+    }
+  }
+}
+
+const styles = () => {
+  return {
     root: {
       height: '100vh',
       width: '100vw',
-      padding: theme.spacing(3)
+      padding: '2rem'
     },
     formControl: {
-      marginBottom: theme.spacing(3)
+      marginBottom: '2rem'
     }
-  }));
-  
-  const classes = useStyles();
-  
-  return (
-    <Grid container className={classes.root} justify="center" xs={12} direction="column" alignContent="center">
-      <h1>Login</h1>
-      <form>
-          <TextField className={classes.formControl} type="text" label="Username" fullWidth />
-          <TextField className={classes.formControl} type="password" label="Password" fullWidth />
-          <Button variant="contained"  color="primary">Login</Button>
-      </form>
-    </Grid>
-  )
+  }
 }
 
-export default Auth;
+export default withStyles(styles, { withTheme: true })(Auths)
