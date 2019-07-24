@@ -1,0 +1,112 @@
+[
+    {
+        "id": 0,
+        "username": "clw0",
+        "password": "eaI'guieMClo",
+        "title": "Dr",
+        "firstname": "Carl",
+        "middleInitial": "L",
+        "lastname": "Wright",
+        "institute": "Addenbrookes Hospital",
+        "dateOfBirth": "1961-03-23"
+    },
+    {
+        "id": 1,
+        "username": "jyc1",
+        "password": "teW;Yu0UKr%V",
+        "title": "Dr",
+        "firstname": "Jacob",
+        "middleInitial": "Y",
+        "lastname": "Chen",
+        "institute": "Baltimore General",
+        "dateOfBirth": "1978-07-19"
+    },
+    {
+        "id": 2,
+        "username": "ktw2",
+        "password": "hKvLafc'Nmsi",
+        "title": "Dr",
+        "firstname": "Kelsey",
+        "middleInitial": "T",
+        "lastname": "Wright",
+        "institute": "Royal Infirmary, Edinburgh",
+        "dateOfBirth": "1960-10-09"
+    },
+    {
+        "id": 3,
+        "username": "ptc3",
+        "password": "x>ocFZk+E4;=",
+        "title": "Dr",
+        "firstname": "Phil",
+        "middleInitial": "T",
+        "lastname": "Chen",
+        "institute": "West Middlesex Hospital",
+        "dateOfBirth": "1966-12-10"
+    },
+    {
+        "id": 4,
+        "username": "ldw4",
+        "password": "KLp=4%RNU)bz",
+        "title": "Dr",
+        "firstname": "Leroy",
+        "middleInitial": "D",
+        "lastname": "Wright",
+        "institute": "Royal Infirmary, Edinburgh",
+        "dateOfBirth": "1991-05-23"
+    },
+    {
+        "id": 5,
+        "username": "jdd5",
+        "password": "bdg<Ng#E/UW7",
+        "title": "Dr",
+        "firstname": "Joanne",
+        "middleInitial": "D",
+        "lastname": "Dench",
+        "institute": "Royal Infirmary, Edinburgh",
+        "dateOfBirth": "1959-12-16"
+    },
+    {
+        "id": 6,
+        "username": "cav6",
+        "password": "K!$n4BzD2Vyz",
+        "title": "Dr",
+        "firstname": "Clive",
+        "middleInitial": "A",
+        "lastname": "Vardy",
+        "institute": "West Middlesex Hospital",
+        "dateOfBirth": "1953-08-10"
+    },
+    {
+        "id": 7,
+        "username": "bpg7",
+        "password": "fPU6I)4HIQiY",
+        "title": "Dr",
+        "firstname": "Benedict",
+        "middleInitial": "P",
+        "lastname": "Gerrard",
+        "institute": "Baltimore General",
+        "dateOfBirth": "1957-05-12"
+    },
+    {
+        "id": 8,
+        "username": "jcd8",
+        "password": "pjekIF\"$Y4(Z",
+        "title": "Dr",
+        "firstname": "Jill",
+        "middleInitial": "C",
+        "lastname": "Deng",
+        "institute": "The Australian Insitute For The Study Of Oncology",
+        "dateOfBirth": "1975-05-13"
+    },
+    {
+        "id": 9,
+        "username": "mct9",
+        "password": "NraBVI;tgUqc",
+        "title": "Dr",
+        "firstname": "Mark",
+        "middleInitial": "C",
+        "lastname": "Taylor",
+        "institute": "Royal Infirmary, Edinburgh",
+        "dateOfBirth": "1983-12-02"
+    }
+]
