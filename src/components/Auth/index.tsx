@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Button, TextField, makeStyles, Paper } from '@material-ui/core';
+import { Grid, Button, TextField, makeStyles } from '@material-ui/core';
 
 const Auth: React.FC  = () => {
   const useStyles = makeStyles(theme => ({
