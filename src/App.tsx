@@ -1,10 +1,16 @@
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
+import { Grid } from '@material-ui/core'
+const Auth = lazy(() => import('./components/Auth/index'));
 
 const App: React.FC = () => {
   return (
-    <div className="App">
-      Loading...
-    </div>
+    <Grid container>
+      <Suspense fallback={'Loading...'}>
+        <Grid item xs={12}>
+          <Auth />
+        </Grid>
+      </Suspense>
+    </Grid>
   );
 }
 
