@@ -1,35 +1,30 @@
-import React, { Component } from 'react';
-import { Grid, makeStyles } from '@material-ui/core';
+import React from 'react';
+import { Grid, Button, TextField, makeStyles, Paper } from '@material-ui/core';
 
-const useStyles = makeStyles(theme => ({
-  container: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(12, 1fr)',
-    gridGap: theme.spacing(3),
-  },
-  paper: {
-    padding: theme.spacing(1),
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
-    whiteSpace: 'nowrap',
-    marginBottom: theme.spacing(1),
-  },
-  divider: {
-    margin: theme.spacing(2, 0),
-  },
-}));
-
-export default class Auth extends Component {
-
-  classes = useStyles();
-
-  render() {
-    return (
-      <Grid container justify="center" alignContent="center">
-        <Grid item>
-          <h1>Login</h1>
-        </Grid>
-      </Grid>
-    )
-  }
+const Auth: React.FC  = () => {
+  const useStyles = makeStyles(theme => ({
+    root: {
+      height: '100vh',
+      width: '100vw',
+      padding: theme.spacing(3)
+    },
+    formControl: {
+      marginBottom: theme.spacing(3)
+    }
+  }));
+  
+  const classes = useStyles();
+  
+  return (
+    <Grid container className={classes.root} justify="center" xs={12} direction="column" alignContent="center">
+      <h1>Login</h1>
+      <form>
+          <TextField className={classes.formControl} type="text" label="Username" fullWidth />
+          <TextField className={classes.formControl} type="password" label="Password" fullWidth />
+          <Button variant="contained"  color="primary">Login</Button>
+      </form>
+    </Grid>
+  )
 }
+
+export default Auth;
