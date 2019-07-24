@@ -4,6 +4,7 @@ import { BrowserRouter, Route } from 'react-router-dom';
 const Dashboard = lazy(() => import('./components/Dashboard'));
 const Auth = lazy(() => import('./components/Auth/index'));
 
+
 const App: React.FC = () => {
   return (
     <BrowserRouter>
