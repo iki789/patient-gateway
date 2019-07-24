@@ -35,8 +35,6 @@ class Auth implements IAuth{
     return this.token;
   }
 
-  private decodeToken(){}
-
   login(user: IUser): IUser{
     localStorage.setItem('token', this.generateToken(user))
     return user;
@@ -44,6 +42,7 @@ class Auth implements IAuth{
 
   logout(): void{
     localStorage.removeItem('token');
+    this.isLoggedIn = false;
   }
 
   private loggedIn():boolean{
@@ -54,8 +53,12 @@ class Auth implements IAuth{
 
   get user(){
     if(this.token){
-      let user = jwt.decode(this.token, this.secret);
-      return {id: user.sub, name: user.name }; 
+      try{
+        let user = jwt.decode(this.token, this.secret);
+        return {id: user.sub, name: user.name }; 
+      }catch(err){
+        this.logout();
+      }
     }
   }
 }
