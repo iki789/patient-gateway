@@ -1,8 +1,10 @@
 import React, { ChangeEvent } from 'react';
+import { RouteComponentProps  } from 'react-router-dom';
 import { Grid, Button, TextField } from '@material-ui/core';
 import { withStyles } from '@material-ui/styles';
+import { Auth } from '../../lib/auth';
 
-class Auths extends React.Component<AuthProps, AuthState>{
+class Auths extends React.Component<RouteComponentProps<{}> & AuthProps, AuthState>{
 
   state: AuthState = {
     controls:{
@@ -19,6 +21,12 @@ class Auths extends React.Component<AuthProps, AuthState>{
     },
     isValid: false,
     isLoading: false
+  }
+
+  componentDidMount(){
+    if(Auth.isLoggedIn){
+      this.props.history.push('/')
+    }
   }
 
   handleChange = (e: ChangeEvent<HTMLInputElement>):void=>{
@@ -108,8 +116,9 @@ class Auths extends React.Component<AuthProps, AuthState>{
   }
 }
 
+
 interface AuthProps{
-  classes: any
+  classes: any 
 }
 
 interface AuthState{
