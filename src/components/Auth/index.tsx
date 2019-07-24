@@ -16,22 +16,69 @@ class Auths extends React.Component<AuthProps, AuthState>{
         isDirty: false,
         value: ''
       }
-    }
+    },
+    isValid: false,
+    isLoading: false
   }
 
-  handleChange = (e: ChangeEvent<HTMLInputElement>)=>{
-    let { name, value } = e.target;
+  handleChange = (e: ChangeEvent<HTMLInputElement>):void=>{
+    let name: string = e.target.name;
+    let value: string = e.target.value; 
     if(name === 'username' || name === 'password'){
       this.setState({
         controls:{
           ...this.state.controls,
           [name]:{
             ...this.state.controls[name],
+            isDirty: true,
             value
           }
         }
+      }, ()=>{
+        this.validateInput(name === 'username' ? 'username' : 'password');
       })
     }
+  }
+
+  validateInput(name: "username" | "password"): boolean{
+    let value = (this.state.controls[name].value).trim();
+    if(name === 'username'){
+      if(value.length < 3 || value.includes(' ')){
+        console.log("not Valid")
+        this.setIsValidProperty(name, false);
+        return false;
+      }
+    }
+    if(name === 'password'){
+      if(value.length < 1){
+        this.setIsValidProperty(name, false);
+        return false;
+      }
+    }
+
+    this.setIsValidProperty(name, true);
+    return true;
+  }
+
+  validateForm():boolean{
+    if(!this.state.controls.username.isValid || !this.state.controls.password.isValid){
+      return false;
+    }
+    return true;
+  }
+
+  private setIsValidProperty(name: "username" | "password", value: boolean):void{
+    this.setState({
+      controls:{
+        ...this.state.controls,
+        [name]:{
+          ...this.state.controls[name],
+          isValid: value
+        }
+      }
+    }, ()=>{
+      this.setState({ isValid: (this.state.controls.username.isValid && this.state.controls.password.isValid)})
+    })
   }
 
   render(){
@@ -45,15 +92,17 @@ class Auths extends React.Component<AuthProps, AuthState>{
               onChange={this.handleChange}
               name="username"
               value={this.state.controls.username.value} 
-              label="Username" fullWidth />
+              label="Username" fullWidth 
+              error={(!this.state.controls.username.isValid && this.state.controls.username.isDirty)}/>
             <TextField 
               className={this.props.classes.formControl} 
               type="password"
               name="password"
               onChange={this.handleChange}
               value={this.state.controls.password.value} 
+              error={(!this.state.controls.password.isValid && this.state.controls.password.isDirty)}
               label="Password" fullWidth />
-            <Button variant="contained"  color="primary">Login</Button>
+            <Button variant="contained"  color="primary" disabled={!this.state.isValid}>Login</Button>
         </form>
       </Grid>
     )
@@ -76,7 +125,9 @@ interface AuthState{
       isDirty: boolean,
       value: string
     }
-  }
+  },
+  isValid: boolean,
+  isLoading: boolean
 }
 
 const styles = () => {
