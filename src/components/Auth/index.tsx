@@ -44,7 +44,6 @@ class Auths extends React.Component<AuthProps, AuthState>{
     let value = (this.state.controls[name].value).trim();
     if(name === 'username'){
       if(value.length < 3 || value.includes(' ')){
-        console.log("not Valid")
         this.setIsValidProperty(name, false);
         return false;
       }
