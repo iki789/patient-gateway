@@ -1,13 +1,21 @@
+import { Users, IUser } from '../db';
+
 export class Auth implements IAuth{
   
   isLoggedIn: boolean = false ;
   
-  authenticate(userId: string, password: string){
-    return true;
+  authenticate(username: string, password: string){
+    let user: IUser | undefined = Users.find(user=>user.username === username);
+    if(user){
+      if(user.password === password){
+        this.login(user.username);
+        return true;
+      }
+    }
+    return false;
   }
 
-  login(userId: string){
-
+  login(username: string){
   }
 
   logout(){
@@ -17,8 +25,8 @@ export class Auth implements IAuth{
 }
 
 interface IAuth{
-  authenticate: (userId: string, password: string)=>boolean
-  login: (userId:string)=>void
+  authenticate: (username: string, password: string)=>boolean
+  login: (username:string)=>void
   logout: ()=>void
   isLoggedIn: boolean
 }
