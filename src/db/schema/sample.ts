@@ -1,6 +1,6 @@
 export interface ISample{
   id: number;
-  patientId: 1;
+  patientId: number;
   sampleType: TSample;
   date: "2016-02-12 07:34:26";
   quality: "low" | "medium" | "high";
