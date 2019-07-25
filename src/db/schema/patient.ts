@@ -1,6 +1,6 @@
 export interface IPatient{
   id: number;
-  userId: string;
+  userId: number;
   firstname: string;
   middleInitial: string;
   lastname: string;
