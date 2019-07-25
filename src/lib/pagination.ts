@@ -8,7 +8,6 @@ export class Pagination implements IPagination{
     this.sortItems();
     this.perPage = perPage;
     this.calculatePages();
-    console.log(this.items)
   }
 
   calculatePages(): void{
