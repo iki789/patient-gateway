@@ -16,9 +16,18 @@ export class Patient extends Pagination implements IBase {
 		return this.patients.filter((p) => p.id === id)[0];
 	}
 
-	getAll(page: number) {
-		page = page < 1 ? 1 : page;
-		return this.getItemsOnPage(page);
+	getAll() {
+		return PatientsDB.filter((p) => p.userId === this.userId).sort((a, b) => {
+			let x = a.firstname.toLowerCase();
+			let y = b.firstname.toLowerCase();
+			if (x < y) {
+				return -1;
+			}
+			if (x > y) {
+				return 1;
+			}
+			return 0;
+		});
 	}
 
 	getAge(birthday: string): number {
@@ -28,5 +37,5 @@ export class Patient extends Pagination implements IBase {
 
 interface IBase {
 	getById: (id: number) => IPatient;
-	getAll: (page: number) => Array<IPatient>;
+	getAll: () => Array<IPatient>;
 }
