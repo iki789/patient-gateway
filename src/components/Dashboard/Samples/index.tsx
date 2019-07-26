@@ -19,8 +19,11 @@ import { Sample } from '../../../lib/sample';
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
 		paper: {
-			paddingTop: theme.spacing(2),
-			paddingBottom: theme.spacing(2)
+			padding: theme.spacing(2)
+		},
+		table: {
+			marginLeft: -theme.spacing(2),
+			marginRight: -theme.spacing(2)
 		},
 		hover: {
 			'&:hover': {
@@ -54,7 +57,7 @@ export const Samples: React.FC<PatientProps> = (props: PatientProps) => {
 	return (
 		<Paper className={classes.paper}>
 			<Typography variant="h5">Patient Samples</Typography>
-			<div>
+			<div className={classes.table}>
 				<Table>
 					<TableHead>
 						<TableRow>
