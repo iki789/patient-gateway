@@ -1,37 +1,16 @@
 import React, { useState } from 'react';
-import {
-	createStyles,
-	makeStyles,
-	Paper,
-	Table,
-	TableBody,
-	TableRow,
-	TableCell,
-	TableHead,
-	Theme,
-	Typography
-} from '@material-ui/core';
+import { createStyles, makeStyles, FormControl, Theme, Select, MenuItem, FormHelperText } from '@material-ui/core';
 import { IPatient } from '../../../db/schema/patient';
 import { Patient } from '../../../lib/patient';
-import { Pagination } from '../../UI/Pagination';
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
-		paper: {
-			padding: theme.spacing(2)
+		formControl: {
+			margin: theme.spacing(1),
+			minWidth: 120
 		},
-		wrapper: {
-			// height: 300,
-			// overflowX: 'hidden',
-			// overflowY: 'scroll'
-		},
-		hover: {
-			'&:hover': {
-				cursor: 'pointer'
-			}
-		},
-		selected: {
-			backgroundColor: `${theme.palette.primary.light} !important`
+		selectEmpty: {
+			marginTop: theme.spacing(2)
 		}
 	})
 );
@@ -40,48 +19,36 @@ export const Patients: React.FC<PatientProps> = (props: PatientProps) => {
 	const classes = useStyles();
 	const patientService: Patient = new Patient(0);
 	patientService.setPerPage = 6;
-	const [ patients, setPatients ] = useState(patientService.getAll(1));
+	const [ patients, setPatients ] = useState(patientService.getAll());
 	const [ selectedPatient, setSelectedPateint ] = useState();
 
-	const handlePageChange = (page: number) => {
-		setPatients(patientService.getAll(page));
-	};
-
-	const handleRowClick = (e: React.MouseEvent<HTMLElement>, id: number) => {
+	const handleChange = (e: React.ChangeEvent<any>) => {
+		const id = parseInt(e.target.value);
 		setSelectedPateint(id);
 		props.onSelect(id);
 	};
 
 	return (
-		<Paper className={classes.paper}>
-			<Typography variant="h5">Patients</Typography>
-			<div className={classes.wrapper}>
-				<Table>
-					<TableHead>
-						<TableRow>
-							<TableCell>Patient Name</TableCell>
-						</TableRow>
-					</TableHead>
-					<TableBody>
-						{patients.map((p: IPatient) => (
-							<TableRow
-								hover={true}
-								classes={{ selected: classes.selected, hover: classes.hover }}
-								selected={selectedPatient === p.id}
-								key={p.id}
-								onClick={(e) => handleRowClick(e, p.id)}
-							>
-								<TableCell>
-									{p.firstname} {p.middleInitial ? p.middleInitial + '. ' : ''}
-									{p.lastname} ({p.gender.charAt(0)}, {patientService.getAge(p.dateOfBirth)})
-								</TableCell>
-							</TableRow>
-						))}
-					</TableBody>
-				</Table>
-			</div>
-			<Pagination pageCount={patientService.pageCount} handlePageChange={handlePageChange} />
-		</Paper>
+		<FormControl className={classes.formControl}>
+			<Select
+				value={selectedPatient ? selectedPatient : ''}
+				onChange={handleChange}
+				name="age"
+				displayEmpty
+				className={classes.selectEmpty}
+			>
+				<MenuItem value="" disabled>
+					Patient
+				</MenuItem>
+				{patients.map((p) => (
+					<MenuItem value={p.id} key={p.id}>
+						{p.firstname} {p.middleInitial}. {p.lastname} ({p.gender.charAt(0)},{' '}
+						{new Date().getFullYear() - new Date(p.dateOfBirth).getFullYear()})
+					</MenuItem>
+				))}
+			</Select>
+			<FormHelperText>Patient</FormHelperText>
+		</FormControl>
 	);
 };
 
