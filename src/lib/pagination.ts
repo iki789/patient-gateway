@@ -19,7 +19,7 @@ export class Pagination implements IPagination{
   }
 
   getItemsOnPage(page: number): Array<any>{
-    let skip = page*this.perPage;
+    let skip = (page*this.perPage) - this.perPage;
     let pageItems: Array<any> = [];
     for(let i = 0; i < this.perPage; i++){
       if(!this.items[skip+i]){
