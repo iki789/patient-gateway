@@ -54,7 +54,7 @@ export const Patients: React.FC<PatientProps> = (props: PatientProps) => {
 
 	return (
 		<Paper className={classes.paper}>
-			<Typography variant="h5">Your Patients</Typography>
+			<Typography variant="h5">Patients</Typography>
 			<div className={classes.wrapper}>
 				<Table>
 					<TableHead>
