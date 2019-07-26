@@ -22,6 +22,10 @@ export class Patient implements IBase{
     return this.paginationHelper.getItemsOnPage(page);
   }
 
+  set setPerPage(perPage: number){
+    this.perPage = perPage;
+    this.paginationHelper.perPage = perPage;
+  }
   get pageCount(){
     return this.paginationHelper.pages;
   }
