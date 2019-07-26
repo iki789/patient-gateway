@@ -12,14 +12,15 @@ import {
 	Typography
 } from '@material-ui/core';
 import moment from 'moment';
+import Pagination from 'material-ui-flat-pagination';
 import { ISample } from '../../../db/schema';
 import { Sample } from '../../../lib/sample';
-import { Pagination } from '../../UI/Pagination';
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
 		paper: {
-			padding: theme.spacing(2)
+			paddingTop: theme.spacing(2),
+			paddingBottom: theme.spacing(2)
 		},
 		hover: {
 			'&:hover': {
@@ -38,8 +39,10 @@ export const Samples: React.FC<PatientProps> = (props: PatientProps) => {
 	sampleService.setPerPage = 6;
 	const [ samples, setSamples ] = useState(sampleService.getByPatient(1, 1));
 	const [ selectedSample, setSelectedSample ] = useState();
+	const [ pageOffset, setPageOffset ] = useState(0);
 
-	const handlePageChange = (page: number) => {
+	const handlePageChange = (e: React.MouseEvent<HTMLElement>, offset: number, page: number) => {
+		setPageOffset(offset);
 		setSamples(sampleService.getByPatient(1, page));
 	};
 
@@ -77,7 +80,13 @@ export const Samples: React.FC<PatientProps> = (props: PatientProps) => {
 					</TableBody>
 				</Table>
 			</div>
-			<Pagination pageCount={sampleService.pageCount} handlePageChange={handlePageChange} />
+			<Pagination
+				limit={sampleService.perPage}
+				offset={pageOffset}
+				total={sampleService.items.length}
+				currentPageColor="primary"
+				onClick={handlePageChange}
+			/>
 		</Paper>
 	);
 };
