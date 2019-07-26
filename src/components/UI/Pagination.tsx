@@ -12,8 +12,7 @@ const useStyles = makeStyles((theme: Theme) =>{
       minWidth: '42px',
     },
     active:{
-      backgroundColor: theme.palette.primary.light,
-      color: '#fff !important'
+      color: `${theme.palette.grey[300]} !important`
     },
     input: {
       display: 'none',
