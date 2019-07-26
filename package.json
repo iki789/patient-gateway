@@ -46,6 +46,7 @@
     "jest-resolve": "24.7.1",
     "jest-watch-typeahead": "0.3.0",
     "jwt-simple": "^0.5.6",
+    "material-ui-flat-pagination": "^3.2.0",
     "mini-css-extract-plugin": "0.5.0",
     "moment": "^2.24.0",
     "optimize-css-assets-webpack-plugin": "5.0.1",
