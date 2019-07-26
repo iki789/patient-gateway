@@ -22,6 +22,8 @@ const useStyles = makeStyles((theme: Theme) =>
 			padding: theme.spacing(2)
 		},
 		table: {
+			overflow: 'hidden',
+			overflowX: 'scroll',
 			marginLeft: -theme.spacing(2),
 			marginRight: -theme.spacing(2)
 		},

@@ -21,6 +21,8 @@ const useStyles = makeStyles((theme: Theme) =>
 			padding: theme.spacing(2)
 		},
 		table: {
+			overflow: 'hidden',
+			overflowX: 'scroll',
 			marginLeft: -theme.spacing(2),
 			marginRight: -theme.spacing(2)
 		},
@@ -52,17 +54,6 @@ export const Variants: React.FC<PatientProps> = (props: PatientProps) => {
 		setSelectedVariant(id);
 		props.onSelect(id);
 	};
-
-// 	{
-// 		"id": 0,
-// 		"sampleId": 1,
-// 		"reference_base": "T",
-// 		"alternativeBase": "A",
-// 		"geneName": "KRAS",
-// 		"position": 25236753,
-// 		"mutationType": "benign",
-// 		"alleleFrequency": 0.11928613460360166
-// },
 
 	return (
 		<Paper className={classes.paper}>
