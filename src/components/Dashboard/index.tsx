@@ -22,7 +22,7 @@ class Dashboard extends Component<IDashboard & RouteComponentProps> {
 			<React.Fragment>
 				<AppBar position="static">
 					<Toolbar>
-						<Typography>CCG: Dashboard</Typography>
+						<Typography>Patient Gateway</Typography>
 					</Toolbar>
 				</AppBar>
 				<Container className={this.props.classes.container}>
