@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import { connect } from 'react-redux';
+import { IStore, IRootState } from '../../../store';
+import { SELECTED_PATIENT } from '../../../store/actionsTypes';
 import { createStyles, makeStyles, FormControl, Theme, Select, MenuItem, FormHelperText } from '@material-ui/core';
-import { IPatient } from '../../../db/schema/patient';
 import { Patient } from '../../../lib/patient';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -15,11 +17,11 @@ const useStyles = makeStyles((theme: Theme) =>
 	})
 );
 
-export const Patients: React.FC<PatientProps> = (props: PatientProps) => {
+const Patients: React.FC<PatientProps> = (props: PatientProps) => {
 	const classes = useStyles();
-	const patientService: Patient = new Patient(0);
+	const patientService: Patient = new Patient(props.state.userId);
 	patientService.setPerPage = 6;
-	const [ patients, setPatients ] = useState(patientService.getAll());
+	const [ patients ] = useState(patientService.getAll());
 	const [ selectedPatient, setSelectedPateint ] = useState();
 
 	const handleChange = (e: React.ChangeEvent<any>) => {
@@ -53,5 +55,20 @@ export const Patients: React.FC<PatientProps> = (props: PatientProps) => {
 };
 
 interface PatientProps {
+	state: IRootState;
 	onSelect: (id: number) => void;
 }
+
+const mapStateToProps = (state: IStore) => {
+	return {
+		state: state.rootReducer
+	};
+};
+
+const mapDispatchToProps = (dispatch: any) => {
+	return { onSelect: (patientId: number) => dispatch(SELECTED_PATIENT(patientId)) };
+};
+
+const connected = connect(mapStateToProps, mapDispatchToProps)(Patients);
+
+export { connected as Patients };
