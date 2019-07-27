@@ -11,6 +11,8 @@ import {
 	Theme,
 	Typography
 } from '@material-ui/core';
+import { connect } from 'react-redux';
+import { IRootState, IPreviewSample } from '../../../store';
 import Pagination from 'material-ui-flat-pagination';
 import { IVariant } from '../../../db/schema';
 import { Variant } from '../../../lib/variants';
@@ -18,13 +20,15 @@ import { Variant } from '../../../lib/variants';
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
 		paper: {
-			padding: theme.spacing(2)
+			padding: theme.spacing(2),
+			height: 400
 		},
 		table: {
 			overflow: 'hidden',
 			overflowX: 'scroll',
 			marginLeft: -theme.spacing(2),
-			marginRight: -theme.spacing(2)
+			marginRight: -theme.spacing(2),
+			height: 348
 		},
 		hover: {
 			'&:hover': {
@@ -37,7 +41,7 @@ const useStyles = makeStyles((theme: Theme) =>
 	})
 );
 
-export const Variants: React.FC<PatientProps> = (props: PatientProps) => {
+const Variants: React.FC<PatientProps> = (props: PatientProps) => {
 	const classes = useStyles();
 	const variantService: Variant = new Variant();
 	variantService.setPerPage = 6;
@@ -55,9 +59,9 @@ export const Variants: React.FC<PatientProps> = (props: PatientProps) => {
 		props.onSelect(id);
 	};
 
-	return (
-		<Paper className={classes.paper}>
-			<Typography variant="h5">Patient Samples</Typography>
+	const dataTable = (
+		<div>
+			<Typography variant="h5">Variants</Typography>
 			<div className={classes.table}>
 				<Table>
 					<TableHead>
@@ -97,10 +101,23 @@ export const Variants: React.FC<PatientProps> = (props: PatientProps) => {
 				currentPageColor="primary"
 				onClick={handlePageChange}
 			/>
-		</Paper>
+		</div>
 	);
+
+	return <Paper className={classes.paper}>{dataTable}</Paper>;
 };
 
 interface PatientProps {
+	state?: IPreviewSample;
 	onSelect: (id: number) => void;
 }
+
+const mapStateToProps = (state: IRootState) => {
+	return {
+		state: state.rootReducer
+	};
+};
+
+const connected = connect(mapStateToProps)(Variants);
+
+export { connected as Variants };
