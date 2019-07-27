@@ -17,3 +17,21 @@ export const SELECT_SAMPLE = (sampleId: number) => {
 		}
 	};
 };
+
+export const UPDATE_START_DATE = (date: string) => {
+	return {
+		type: actions.UPDATE_START_DATE,
+		payload: {
+			startDate: date
+		}
+	};
+};
+
+export const UPDATE_END_DATE = (date: string) => {
+	return {
+		type: actions.UPDATE_END_DATE,
+		payload: {
+			endDate: date
+		}
+	};
+};

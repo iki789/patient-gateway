@@ -1,8 +1,14 @@
 export interface IRootState {
-	viewPatientSamples: IviewPatientSamples;
+	patientSamples: IPatientSamples;
+	samplesChart: ISamplesChart;
 }
 
-export interface IviewPatientSamples {
+export interface IPatientSamples {
 	patientId: number | null;
 	sampleId: number | null;
+}
+
+export interface ISamplesChart {
+	startData: string;
+	endDate: string;
 }

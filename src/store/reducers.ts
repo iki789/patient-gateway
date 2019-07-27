@@ -1,16 +1,16 @@
 import { combineReducers, Reducer } from 'redux';
-import { IviewPatientSamples } from './';
+import { IPatientSamples, ISamplesChart } from './';
 import { actions } from './actions';
 
-const intialState: IviewPatientSamples = {
+const intialStateViewPatientSamples: IPatientSamples = {
 	patientId: null,
 	sampleId: null
 };
 
-export const viewPatientSamples: Reducer = (
-	state: IviewPatientSamples = intialState,
+export const patientSamples: Reducer = (
+	state: IPatientSamples = intialStateViewPatientSamples,
 	action: { type: string; payload?: any }
-): IviewPatientSamples => {
+): IPatientSamples => {
 	switch (action.type) {
 		case actions.SELECT_PATIENT:
 			state = {
@@ -28,6 +28,19 @@ export const viewPatientSamples: Reducer = (
 	return state;
 };
 
+const intialStateSamplesChart: ISamplesChart = {
+	startData: '',
+	endDate: ''
+};
+
+export const samplesChart: Reducer = (
+	state: ISamplesChart = intialStateSamplesChart,
+	action: { type: string; payload?: any }
+): ISamplesChart => {
+	return state;
+};
+
 export const reducers = combineReducers({
-	viewPatientSamples
+	patientSamples,
+	samplesChart
 });
