@@ -2,14 +2,16 @@ import { Pagination } from './pagination';
 import { Patients as PatientsDB, IPatient } from '../db/index';
 
 export class Patient extends Pagination implements IBase {
-	userId: number;
+	userId: number | null = null;
 	patients: IPatient[] = [];
 
-	constructor(userId: number, patients: IPatient[] = []) {
+	constructor(userId?: number | null, patients: IPatient[] = []) {
 		super(patients);
-		this.userId = userId;
-		this.patients = PatientsDB.filter((p) => p.userId === this.userId);
-		this.items = this.patients;
+		if (userId) {
+			this.userId = userId;
+			this.patients = PatientsDB.filter((p) => p.userId === this.userId);
+			this.items = this.patients;
+		}
 	}
 
 	getById(id: number) {
