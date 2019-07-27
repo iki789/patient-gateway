@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import { SELECTED_PATIENT } from '../../../store/actionsTypes';
+import { SELECT_PATIENT } from '../../../store/actionsTypes';
 import { createStyles, makeStyles, FormControl, Theme, Select, MenuItem, FormHelperText } from '@material-ui/core';
 import { Auth } from '../../../lib/auth';
 import { Patient } from '../../../lib/patient';
@@ -60,7 +60,7 @@ interface PatientProps {
 }
 
 const mapDispatchToProps = (dispatch: any) => {
-	return { onSelect: (patientId: number) => dispatch(SELECTED_PATIENT(patientId)) };
+	return { onSelect: (patientId: number) => dispatch(SELECT_PATIENT(patientId)) };
 };
 
 const connected = connect(null, mapDispatchToProps)(Patients);
