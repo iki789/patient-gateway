@@ -105,7 +105,7 @@ const Variants: React.FC<PatientProps> = (props: PatientProps) => {
 		<Grid container justify="center" alignContent="center" style={{ height: '100%' }}>
 			<Grid item>
 				<Typography variant="h5" className={classes.placeholder}>
-					{props.sampleId ? 'Samples has no variants' : 'Select sample to view variants'}
+					{props.sampleId ? 'Sample has no variants' : 'Select sample to view variants'}
 				</Typography>
 			</Grid>
 		</Grid>

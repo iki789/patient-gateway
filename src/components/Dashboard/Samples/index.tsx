@@ -1,6 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { connect } from 'react-redux';
-import { IStore, IRootState } from '../../../store';
+import React, { useState, useEffect, memo } from 'react';
 import {
 	createStyles,
 	makeStyles,
@@ -14,6 +12,9 @@ import {
 	Theme,
 	Typography
 } from '@material-ui/core';
+import { connect } from 'react-redux';
+import { IRootState } from '../../../store';
+import { SELECT_SAMPLE } from '../../../store/actionsTypes';
 import moment from 'moment';
 import Pagination from 'material-ui-flat-pagination';
 import { ISample } from '../../../db/schema';
@@ -50,25 +51,28 @@ const Samples: React.FC<PatientProps> = (props: PatientProps) => {
 	const classes = useStyles();
 	const sampleService: Sample = new Sample();
 	sampleService.setPerPage = 6;
-	const [ samples, setSamples ] = useState(sampleService.getByPatient(props.state.selectedPatient, 1));
 	const [ selectedSample, setSelectedSample ] = useState();
 	const [ pageOffset, setPageOffset ] = useState(0);
 	const [ currentPage, setCurrentPage ] = useState(1);
+	const [ samples, setSamples ] = useState(
+		props.patientId ? sampleService.getByPatient(props.patientId, currentPage) : []
+	);
 	const [ hasData, setHasData ] = useState(false);
 
 	useEffect(
 		() => {
-			let patients = sampleService.getByPatient(props.state.selectedPatient, currentPage);
-			setSamples(patients);
-			setHasData(patients.length > 0);
+			setSamples(props.patientId ? sampleService.getByPatient(props.patientId, currentPage) : []);
+			setHasData(samples.length > 0);
 		},
-		[ hasData, currentPage, sampleService, props.state.selectedPatient ]
+		[ props.patientId, currentPage, samples, hasData ]
 	);
 
 	const handlePageChange = (e: React.MouseEvent<HTMLElement>, offset: number, page: number) => {
 		setCurrentPage(page);
 		setPageOffset(offset);
-		setSamples(sampleService.getByPatient(props.state.selectedPatient, page));
+		if (props.patientId) {
+			setSamples(sampleService.getByPatient(props.patientId, page));
+		}
 	};
 
 	const handleRowClick = (e: React.MouseEvent<HTMLElement>, id: number) => {
@@ -116,10 +120,10 @@ const Samples: React.FC<PatientProps> = (props: PatientProps) => {
 	);
 
 	const placeholder = (
-		<Grid container alignContent="center" style={{ height: '100%' }}>
+		<Grid container justify="center" alignContent="center" style={{ height: '100%' }}>
 			<Grid item>
 				<Typography variant="h5" className={classes.placeholder}>
-					{props.state.selectedPatient ? 'Patient has not samples' : 'Select patient to view samples'}
+					{props.patientId ? 'Patient has not samples' : 'Select patient to view samples'}
 				</Typography>
 			</Grid>
 		</Grid>
@@ -129,16 +133,23 @@ const Samples: React.FC<PatientProps> = (props: PatientProps) => {
 };
 
 interface PatientProps {
+	patientId: number | null;
 	onSelect: (id: number) => void;
-	state: IRootState;
 }
 
-const mapStateToProps = (state: IStore) => {
+const mapStateToProps = (state: IRootState) => {
 	return {
-		state: state.rootReducer
+		state,
+		patientId: state.rootReducer.viewPatientSamples.patientId
 	};
 };
 
-const connected = connect(mapStateToProps)(Samples);
+const mapDispatchToProps = (dispatch: any) => {
+	return {
+		onSelect: (sampleId: number) => dispatch(SELECT_SAMPLE(sampleId))
+	};
+};
+
+const connected = connect(mapStateToProps, mapDispatchToProps)(Samples);
 
 export { connected as Samples };
