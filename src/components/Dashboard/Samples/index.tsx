@@ -1,4 +1,4 @@
-import React, { useState, useEffect, memo } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
 	createStyles,
 	makeStyles,
@@ -24,14 +24,14 @@ const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
 		paper: {
 			padding: theme.spacing(2),
-			height: 400
+			height: 410
 		},
 		table: {
 			overflow: 'hidden',
 			overflowX: 'scroll',
 			marginLeft: -theme.spacing(2),
 			marginRight: -theme.spacing(2),
-			height: 348
+			height: 358
 		},
 		hover: {
 			'&:hover': {
@@ -64,7 +64,7 @@ const Samples: React.FC<PatientProps> = (props: PatientProps) => {
 			setSamples(props.patientId ? sampleService.getByPatient(props.patientId, currentPage) : []);
 			setHasData(samples.length > 0);
 		},
-		[ props.patientId, currentPage, samples, hasData ]
+		[ props.patientId, currentPage, samples, hasData, sampleService ]
 	);
 
 	const handlePageChange = (e: React.MouseEvent<HTMLElement>, offset: number, page: number) => {

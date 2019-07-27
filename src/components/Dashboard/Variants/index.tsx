@@ -22,14 +22,14 @@ const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
 		paper: {
 			padding: theme.spacing(2),
-			height: 400
+			height: 410
 		},
 		table: {
 			overflow: 'hidden',
 			overflowX: 'scroll',
 			marginLeft: -theme.spacing(2),
 			marginRight: -theme.spacing(2),
-			height: 348
+			height: 358
 		},
 		placeholder: {
 			color: theme.palette.grey[300]
@@ -45,7 +45,6 @@ const Variants: React.FC<PatientProps> = (props: PatientProps) => {
 	const variantService: Variant = new Variant();
 	variantService.setPerPage = 6;
 	const [ variants, setVariants ] = useState(props.sampleId ? variantService.getBySampleId(props.sampleId, 0) : []);
-	const [ selectedVariant, setSelectedVariant ] = useState();
 	const [ currentPage, setCurrentPage ] = useState(1);
 	const [ pageOffset, setPageOffset ] = useState(0);
 
@@ -53,7 +52,7 @@ const Variants: React.FC<PatientProps> = (props: PatientProps) => {
 		() => {
 			setVariants(props.sampleId ? variantService.getBySampleId(props.sampleId, currentPage) : []);
 		},
-		[ variants ]
+		[ variants, currentPage, props.sampleId, variantService ]
 	);
 
 	const handlePageChange = (e: React.MouseEvent<HTMLElement>, offset: number, page: number) => {
