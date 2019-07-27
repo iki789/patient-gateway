@@ -1,24 +1,40 @@
 import { combineReducers, Reducer } from 'redux';
-import { IRootState } from './';
+import { IPreviewSample } from './';
 import { actions } from './actions';
-import { Auth } from '../lib/auth';
 
-export let state: IRootState = {
-	userId: Auth.isLoggedIn && Auth.user ? Auth.user.id : null
+const intialState: IPreviewSample = {
+	viewPatientSamples: {
+		patientId: 5,
+		sampleId: null
+	}
 };
 
 export const appReducer: Reducer = (
-	rootStore: IRootState = state,
+	state: IPreviewSample = intialState,
 	action: { type: string; payload?: any }
-): IRootState => {
+): IPreviewSample => {
 	switch (action.type) {
-		case actions.SELECTED_PATIENT:
-			rootStore = {
-				...rootStore,
-				selectedPatient: action.payload.patientId
+		case actions.SELECT_PATIENT:
+			state = {
+				...state,
+				viewPatientSamples: {
+					sampleId: null,
+					patientId: action.payload.patientId
+				}
 			};
+			break;
+		case actions.SELECT_SAMPLE:
+			state = {
+				...state,
+				viewPatientSamples: {
+					...state.viewPatientSamples,
+					sampleId: action.payload.sampleId
+				}
+			};
+			break;
 	}
-	return rootStore;
+	console.log(state);
+	return state;
 };
 
 export const reducers = combineReducers({

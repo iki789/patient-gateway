@@ -1,9 +1,10 @@
 export interface IRootState {
-	userId: number | null;
-	selectedPatient?: number;
-	selectedSample?: number;
+	rootReducer: IPreviewSample;
 }
 
-export interface IStore {
-	rootReducer: IRootState;
+export interface IPreviewSample {
+	viewPatientSamples: {
+		patientId: number | null;
+		sampleId: number | null;
+	};
 }
