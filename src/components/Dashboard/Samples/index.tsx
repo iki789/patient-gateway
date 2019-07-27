@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import {
 	createStyles,
 	makeStyles,
-	Paper,
 	Grid,
 	Table,
 	TableBody,
@@ -22,10 +21,6 @@ import { Sample } from '../../../lib/sample';
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
-		paper: {
-			padding: theme.spacing(2),
-			height: 410
-		},
 		table: {
 			overflow: 'hidden',
 			overflowX: 'scroll',
@@ -129,7 +124,7 @@ const Samples: React.FC<PatientProps> = (props: PatientProps) => {
 		</Grid>
 	);
 
-	return <Paper className={classes.paper}>{hasData ? dataTable : placeholder}</Paper>;
+	return <React.Fragment>{hasData ? dataTable : placeholder}</React.Fragment>;
 };
 
 interface PatientProps {
