@@ -19,7 +19,8 @@ export class Sample extends Pagination implements IBase {
 		return this.getItemsOnPage(page);
 	}
 
-	getByPatient(patientId: number, page: number) {
+	getByPatient(patientId: number | null, page: number) {
+		if (!patientId) return [];
 		this.items = this.samples.filter((s) => s.patientId === patientId);
 		return this.getItemsOnPage(page);
 	}
