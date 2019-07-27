@@ -1,73 +1,76 @@
 import jwt from 'jwt-simple';
 import { Users, IUser } from '../db';
 
-class Auth implements IAuth{
-  isLoggedIn: boolean = false ;
-  token: string | null = '';
-  private secret: string = "An apple a day keeps the doctor away!";
-  
-  constructor(){
-    this.isLoggedIn = this.loggedIn();
-    if(this.isLoggedIn){
-      this.token = localStorage.getItem('token');
-    }
-  }
+class Auth implements IAuth {
+	isLoggedIn: boolean = false;
+	token: string | null = '';
+	private secret: string = 'An apple a day keeps the doctor away!';
 
-  authenticate(username: string, password: string): boolean{
-    let user: IUser | undefined = Users.find(user=>user.username === username);
-    if(user){
-      if(user.password === password){
-        this.login(user);
-        this.isLoggedIn = true;
-        return true;
-      }
-    }
-    return false;
-  }
+	constructor() {
+		this.isLoggedIn = this.loggedIn();
+		if (this.isLoggedIn) {
+			this.token = localStorage.getItem('token');
+		}
+	}
 
-  private generateToken(user: IUser): string{
-    let payload = {
-      sub: user.id, 
-      name: `${user.firstname} ${user.middleInitial.length ? user.middleInitial + '.' : ''} ${user.lastname}`,
-      exp: Math.floor(Date.now() / 1000) + (60 * 60)
-    };
-    this.token = jwt.encode(payload, this.secret);
-    return this.token;
-  }
+	authenticate(username: string, password: string): boolean {
+		let user: IUser | undefined = Users.find((user) => user.username === username);
+		if (user) {
+			if (user.password === password) {
+				this.login(user);
+				this.isLoggedIn = true;
+				return true;
+			}
+		}
+		return false;
+	}
 
-  private decodeToken(){}
+	private generateToken(user: IUser): string {
+		let payload = {
+			sub: user.id,
+			name: `${user.firstname} ${user.middleInitial.length ? user.middleInitial + '.' : ''} ${user.lastname}`,
+			exp: Math.floor(Date.now() / 1000) + 60 * 60
+		};
+		this.token = jwt.encode(payload, this.secret);
+		return this.token;
+	}
 
-  login(user: IUser): IUser{
-    localStorage.setItem('token', this.generateToken(user))
-    return user;
-  }
+	login(user: IUser): IUser {
+		localStorage.setItem('token', this.generateToken(user));
+		return user;
+	}
 
-  logout(): void{
-    localStorage.removeItem('token');
-  }
+	logout(): void {
+		localStorage.removeItem('token');
+		this.isLoggedIn = false;
+	}
 
-  private loggedIn():boolean{
-    let isLoggedIn = localStorage.getItem('token') ? true : false ;
-    this.isLoggedIn = isLoggedIn;
-    return this.isLoggedIn;
-  }
+	private loggedIn(): boolean {
+		let isLoggedIn = localStorage.getItem('token') ? true : false;
+		this.isLoggedIn = isLoggedIn;
+		return this.isLoggedIn;
+	}
 
-  get user(){
-    if(this.token){
-      let user = jwt.decode(this.token, this.secret);
-      return {id: user.sub, name: user.name }; 
-    }
-  }
+	get user() {
+		if (this.token) {
+			try {
+				let user = jwt.decode(this.token, this.secret);
+				return { id: user.sub, name: user.name };
+			} catch (err) {
+				this.logout();
+			}
+		}
+		return false;
+	}
 }
-
 
 let Singleton = new Auth();
 
-export { Singleton as Auth};
+export { Singleton as Auth };
 
-export interface IAuth{
-  authenticate: (username: string, password: string)=>boolean
-  login: (user: IUser)=>IUser
-  logout: ()=>void
-  isLoggedIn: boolean
+export interface IAuth {
+	authenticate: (username: string, password: string) => boolean;
+	login: (user: IUser) => IUser;
+	logout: () => void;
+	isLoggedIn: boolean;
 }

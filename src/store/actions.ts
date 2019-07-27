@@ -1,0 +1,4 @@
+export const actions = {
+	SELECT_PATIENT: 'SELECT_PATIENT',
+	SELECT_SAMPLE: 'SELECT_SAMPLE'
+};
