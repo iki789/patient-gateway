@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
-import { Container, Grid, AppBar, Toolbar, Typography, withStyles } from '@material-ui/core';
+import { Container, Grid, AppBar, Paper, Toolbar, Typography, Theme, withStyles } from '@material-ui/core';
 import { Auth } from '../../lib/auth';
 import { Patients } from './Patients';
 import { Samples } from './Samples';
 import { Variants } from './Variants';
+import { SamplesChart } from './SamplesChart';
 
 class Dashboard extends Component<IDashboard & RouteComponentProps> {
 	componentDidMount() {
@@ -35,10 +36,21 @@ class Dashboard extends Component<IDashboard & RouteComponentProps> {
 							<Patients />
 						</Grid>
 						<Grid item xs={12} md={4}>
-							<Samples />
+							<Paper className={this.props.classes.paper}>
+								<Samples />
+							</Paper>
 						</Grid>
 						<Grid item xs={12} md={8}>
 							<Variants onSelect={this.hanldePatientSelect} />
+						</Grid>
+					</Grid>
+				</Container>
+				<Container className={this.props.classes.container}>
+					<Grid container spacing={2}>
+						<Grid item xs={12}>
+							<Paper className={this.props.classes.paper}>
+								<SamplesChart />
+							</Paper>
 						</Grid>
 					</Grid>
 				</Container>
@@ -51,10 +63,14 @@ interface IDashboard {
 	classes: any;
 }
 
-let styles = () => {
+let styles = (theme: Theme) => {
 	return {
 		container: {
 			marginTop: '1rem'
+		},
+		paper: {
+			padding: theme.spacing(2),
+			height: 410
 		}
 	};
 };
