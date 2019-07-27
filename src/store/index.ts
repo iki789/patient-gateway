@@ -1,10 +1,8 @@
 export interface IRootState {
-	rootReducer: IPreviewSample;
+	viewPatientSamples: IviewPatientSamples;
 }
 
-export interface IPreviewSample {
-	viewPatientSamples: {
-		patientId: number | null;
-		sampleId: number | null;
-	};
+export interface IviewPatientSamples {
+	patientId: number | null;
+	sampleId: number | null;
 }

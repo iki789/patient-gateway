@@ -120,7 +120,7 @@ interface PatientProps {
 
 const mapStateToProps = (state: IRootState) => {
 	return {
-		sampleId: state.rootReducer.viewPatientSamples.sampleId
+		sampleId: state.patientSamples.sampleId
 	};
 };
 
