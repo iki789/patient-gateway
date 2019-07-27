@@ -11,10 +11,12 @@ import {
 	Theme,
 	Typography
 } from '@material-ui/core';
+import { MuiPickersUtilsProvider, KeyboardDatePicker, MaterialUiPickersDate } from '@material-ui/pickers';
+import moment from '@date-io/moment';
 import { connect } from 'react-redux';
 import { IRootState } from '../../../store';
 import { SELECT_SAMPLE } from '../../../store/actionsTypes';
-import moment from 'moment';
+import momentJs from 'moment';
 import Pagination from 'material-ui-flat-pagination';
 import { ISample } from '../../../db/schema';
 import { Sample } from '../../../lib/sample';
@@ -53,6 +55,8 @@ const Samples: React.FC<PatientProps> = (props: PatientProps) => {
 		props.patientId ? sampleService.getByPatient(props.patientId, currentPage) : []
 	);
 	const [ hasData, setHasData ] = useState(false);
+	const [ fromDate, setFromDate ] = useState(new Date('1 Jan 2019'));
+	const [ toDate, setToDate ] = useState(new Date());
 
 	useEffect(
 		() => {
@@ -75,9 +79,46 @@ const Samples: React.FC<PatientProps> = (props: PatientProps) => {
 		props.onSelect(id);
 	};
 
+	const handleFromDateChange = (date: MaterialUiPickersDate) => {
+		if (date) {
+			setFromDate(new Date(date.format('MMM DD YYYY')));
+		}
+	};
+
+	const handleToDateChange = (date: MaterialUiPickersDate) => {
+		if (date) {
+			setToDate(new Date(date.format('MMM DD YYYY')));
+		}
+	};
+
+	const dateRangeSelect = (
+		<MuiPickersUtilsProvider utils={moment}>
+			<Typography variant="h5">Sample Alle</Typography>
+			<KeyboardDatePicker
+				disableFuture
+				openTo="year"
+				format="DD MMM YYYY"
+				label="From"
+				views={[ 'year', 'month', 'date' ]}
+				value={fromDate}
+				onChange={handleFromDateChange}
+			/>
+			<KeyboardDatePicker
+				disableFuture
+				openTo="year"
+				format="DD MMM YYYY"
+				label="To"
+				views={[ 'year', 'month', 'date' ]}
+				value={toDate}
+				onChange={handleToDateChange}
+			/>
+		</MuiPickersUtilsProvider>
+	);
+
 	const dataTable = (
 		<div>
-			<Typography variant="h5">Patient Samples</Typography>
+			{props.title ? <Typography variant="h5">{props.title}</Typography> : null}
+			{props.showDatePicker ? dateRangeSelect : null}
 			<div className={classes.table}>
 				<Table>
 					<TableHead>
@@ -98,7 +139,7 @@ const Samples: React.FC<PatientProps> = (props: PatientProps) => {
 							>
 								<TableCell>{s.sampleType}</TableCell>
 								<TableCell>{s.quality}</TableCell>
-								<TableCell title={s.date}>{moment(s.date).calendar('', { sameElse: 'MM/DD/YY' })}</TableCell>
+								<TableCell title={s.date}>{momentJs(s.date).calendar('', { sameElse: 'MM/DD/YY' })}</TableCell>
 							</TableRow>
 						))}
 					</TableBody>
@@ -129,6 +170,8 @@ const Samples: React.FC<PatientProps> = (props: PatientProps) => {
 
 interface PatientProps {
 	patientId: number | null;
+	title?: string;
+	showDatePicker?: boolean;
 	onSelect: (id: number) => void;
 }
 
