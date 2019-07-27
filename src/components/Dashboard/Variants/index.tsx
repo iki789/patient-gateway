@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import {
 	createStyles,
 	makeStyles,
-	Paper,
 	Grid,
 	Table,
 	TableBody,
@@ -20,10 +19,6 @@ import { Variant } from '../../../lib/variants';
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
-		paper: {
-			padding: theme.spacing(2),
-			height: 410
-		},
 		table: {
 			overflow: 'hidden',
 			overflowX: 'scroll',
@@ -110,7 +105,7 @@ const Variants: React.FC<PatientProps> = (props: PatientProps) => {
 		</Grid>
 	);
 
-	return <Paper className={classes.paper}>{variants.length > 0 ? dataTable : placeholder}</Paper>;
+	return <React.Fragment>{variants.length > 0 ? dataTable : placeholder}</React.Fragment>;
 };
 
 interface PatientProps {
