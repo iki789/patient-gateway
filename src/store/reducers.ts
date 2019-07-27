@@ -4,7 +4,7 @@ import { actions } from './actions';
 
 const intialState: IPreviewSample = {
 	viewPatientSamples: {
-		patientId: 5,
+		patientId: null,
 		sampleId: null
 	}
 };
@@ -33,7 +33,6 @@ export const appReducer: Reducer = (
 			};
 			break;
 	}
-	console.log(state);
 	return state;
 };
 
