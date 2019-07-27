@@ -26,8 +26,8 @@ class Dashboard extends Component<IDashboard & RouteComponentProps> {
 					</Toolbar>
 				</AppBar>
 				<Container className={this.props.classes.container}>
-					<Typography variant="h4">Welcome </Typography>
-					<Typography display="inline" variant="h6">
+					<Typography variant="h5">Welcome </Typography>
+					<Typography display="inline" variant="subtitle2">
 						Dr. {Auth && Auth.user ? Auth.user.name : ''}
 					</Typography>
 					<Grid container spacing={2}>
