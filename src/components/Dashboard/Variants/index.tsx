@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
 	createStyles,
 	makeStyles,
 	Paper,
+	Grid,
 	Table,
 	TableBody,
 	TableRow,
@@ -12,7 +13,7 @@ import {
 	Typography
 } from '@material-ui/core';
 import { connect } from 'react-redux';
-import { IRootState, IPreviewSample } from '../../../store';
+import { IRootState } from '../../../store';
 import Pagination from 'material-ui-flat-pagination';
 import { IVariant } from '../../../db/schema';
 import { Variant } from '../../../lib/variants';
@@ -30,10 +31,8 @@ const useStyles = makeStyles((theme: Theme) =>
 			marginRight: -theme.spacing(2),
 			height: 348
 		},
-		hover: {
-			'&:hover': {
-				cursor: 'pointer'
-			}
+		placeholder: {
+			color: theme.palette.grey[300]
 		},
 		selected: {
 			backgroundColor: `${theme.palette.primary.light} !important`
@@ -45,18 +44,22 @@ const Variants: React.FC<PatientProps> = (props: PatientProps) => {
 	const classes = useStyles();
 	const variantService: Variant = new Variant();
 	variantService.setPerPage = 6;
-	const [ variants, setVariants ] = useState(variantService.getBySampleId(1, 1));
+	const [ variants, setVariants ] = useState(props.sampleId ? variantService.getBySampleId(props.sampleId, 0) : []);
 	const [ selectedVariant, setSelectedVariant ] = useState();
+	const [ currentPage, setCurrentPage ] = useState(1);
 	const [ pageOffset, setPageOffset ] = useState(0);
+
+	useEffect(
+		() => {
+			setVariants(props.sampleId ? variantService.getBySampleId(props.sampleId, currentPage) : []);
+		},
+		[ variants ]
+	);
 
 	const handlePageChange = (e: React.MouseEvent<HTMLElement>, offset: number, page: number) => {
 		setPageOffset(offset);
-		setVariants(variantService.getBySampleId(1, page));
-	};
-
-	const handleRowClick = (e: React.MouseEvent<HTMLElement>, id: number) => {
-		setSelectedVariant(id);
-		props.onSelect(id);
+		setCurrentPage(page);
+		setVariants(props.sampleId ? variantService.getBySampleId(props.sampleId, page) : []);
 	};
 
 	const dataTable = (
@@ -76,13 +79,7 @@ const Variants: React.FC<PatientProps> = (props: PatientProps) => {
 					</TableHead>
 					<TableBody>
 						{variants.map((v: IVariant) => (
-							<TableRow
-								hover={true}
-								classes={{ selected: classes.selected, hover: classes.hover }}
-								selected={selectedVariant === v.id}
-								key={v.id}
-								onClick={(e) => handleRowClick(e, v.id)}
-							>
+							<TableRow hover={true} key={v.id}>
 								<TableCell>{v.geneName}</TableCell>
 								<TableCell>{v.mutationType}</TableCell>
 								<TableCell>{v.position}</TableCell>
@@ -104,17 +101,27 @@ const Variants: React.FC<PatientProps> = (props: PatientProps) => {
 		</div>
 	);
 
-	return <Paper className={classes.paper}>{dataTable}</Paper>;
+	const placeholder = (
+		<Grid container justify="center" alignContent="center" style={{ height: '100%' }}>
+			<Grid item>
+				<Typography variant="h5" className={classes.placeholder}>
+					{props.sampleId ? 'Samples has no variants' : 'Select sample to view variants'}
+				</Typography>
+			</Grid>
+		</Grid>
+	);
+
+	return <Paper className={classes.paper}>{variants.length > 0 ? dataTable : placeholder}</Paper>;
 };
 
 interface PatientProps {
-	state?: IPreviewSample;
+	sampleId: number | null;
 	onSelect: (id: number) => void;
 }
 
 const mapStateToProps = (state: IRootState) => {
 	return {
-		state: state.rootReducer
+		sampleId: state.rootReducer.viewPatientSamples.sampleId
 	};
 };
 
