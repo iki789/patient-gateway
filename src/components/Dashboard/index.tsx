@@ -41,7 +41,9 @@ class Dashboard extends Component<IDashboard & RouteComponentProps> {
 							</Paper>
 						</Grid>
 						<Grid item xs={12} md={8}>
-							<Variants onSelect={this.hanldePatientSelect} />
+							<Paper className={this.props.classes.paper}>
+								<Variants onSelect={this.hanldePatientSelect} />
+							</Paper>
 						</Grid>
 					</Grid>
 				</Container>
