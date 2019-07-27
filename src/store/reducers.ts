@@ -1,5 +1,5 @@
 import { combineReducers, Reducer } from 'redux';
-import { IPatientSamples, ISamplesChart } from './';
+import { IPatientSamples } from './';
 import { actions } from './actions';
 
 const intialStateViewPatientSamples: IPatientSamples = {
@@ -28,19 +28,6 @@ export const patientSamples: Reducer = (
 	return state;
 };
 
-const intialStateSamplesChart: ISamplesChart = {
-	startData: '',
-	endDate: ''
-};
-
-export const samplesChart: Reducer = (
-	state: ISamplesChart = intialStateSamplesChart,
-	action: { type: string; payload?: any }
-): ISamplesChart => {
-	return state;
-};
-
 export const reducers = combineReducers({
-	patientSamples,
-	samplesChart
+	patientSamples
 });
