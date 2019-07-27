@@ -1,1 +1,4 @@
-export const actions = { SELECTED_PATIENT: 'SELECTED_PATIENT' };
+export const actions = {
+	SELECT_PATIENT: 'SELECT_PATIENT',
+	SELECT_SAMPLE: 'SELECT_SAMPLE'
+};

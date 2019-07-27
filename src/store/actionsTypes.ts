@@ -1,10 +1,19 @@
 import { actions } from './actions';
 
-export const SELECTED_PATIENT = (patientId: number) => {
+export const SELECT_PATIENT = (patientId: number) => {
 	return {
-		type: actions.SELECTED_PATIENT,
+		type: actions.SELECT_PATIENT,
 		payload: {
 			patientId
+		}
+	};
+};
+
+export const SELECT_SAMPLE = (sampleId: number) => {
+	return {
+		type: actions.SELECT_SAMPLE,
+		payload: {
+			sampleId
 		}
 	};
 };
