@@ -36,7 +36,10 @@ const useStyles = makeStyles((theme: Theme) =>
 			}
 		},
 		placeholder: {
-			color: theme.palette.grey[300]
+			color: theme.palette.grey[300],
+			textAlign: 'center',
+			marginTop: theme.spacing(4),
+			marginBottom: theme.spacing(4)
 		},
 		selected: {
 			backgroundColor: `${theme.palette.primary.light} !important`
@@ -114,31 +117,37 @@ const Samples: React.FC<PatientProps> = (props: PatientProps) => {
 
 	const dateRangeSelect = (
 		<MuiPickersUtilsProvider utils={moment}>
-			<Typography variant="h5">Sample Alle</Typography>
-			<KeyboardDatePicker
-				disableFuture
-				openTo="year"
-				format="DD MMM YYYY"
-				label="From"
-				views={[ 'year', 'month', 'date' ]}
-				value={fromDate}
-				onChange={handleFromDateChange}
-			/>
-			<KeyboardDatePicker
-				disableFuture
-				openTo="year"
-				format="DD MMM YYYY"
-				label="To"
-				views={[ 'year', 'month', 'date' ]}
-				value={toDate}
-				onChange={handleToDateChange}
-			/>
+			<Grid container spacing={2}>
+				{props.title ? <Typography variant="h5">props.title</Typography> : null}
+				<Grid item>
+					<KeyboardDatePicker
+						disableFuture
+						openTo="year"
+						format="DD MMM YYYY"
+						label="From"
+						views={[ 'year', 'month', 'date' ]}
+						value={fromDate}
+						onChange={handleFromDateChange}
+					/>
+				</Grid>
+				<Grid item>
+					<KeyboardDatePicker
+						disableFuture
+						openTo="year"
+						format="DD MMM YYYY"
+						label="To"
+						views={[ 'year', 'month', 'date' ]}
+						value={toDate}
+						onChange={handleToDateChange}
+					/>
+				</Grid>
+			</Grid>
 		</MuiPickersUtilsProvider>
 	);
 
 	const dataTable = (
 		<div>
-			{props.title ? <Typography variant="h5">{props.title}</Typography> : null}
+			{props.title && !props.showDatePicker ? <Typography variant="h5">{props.title}</Typography> : null}
 			<div className={classes.table}>
 				<Table>
 					<TableHead>
