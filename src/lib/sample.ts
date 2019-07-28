@@ -28,10 +28,10 @@ export class Sample extends Pagination implements IBase {
 	}
 
 	getBetweenDatesByPatient(from: Date, to: Date, patientId: number, page: number): ISample[] {
-		const fromTime = moment(from).format('x');
-		const toTime = moment(to).format('x');
+		const fromTime = moment(from);
+		const toTime = moment(to);
 		this.items = this.samples.filter((s) => {
-			let t = moment(s.date).format('x');
+			let t = moment(s.date);
 			return t >= fromTime && t <= toTime && s.patientId === patientId;
 		});
 		return this.sortByDate(this.getItemsOnPage(page));
