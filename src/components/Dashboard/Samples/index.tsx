@@ -7,6 +7,7 @@ import {
 	TableBody,
 	TableRow,
 	TableCell,
+	TablePagination,
 	TableHead,
 	Theme,
 	Typography
@@ -17,7 +18,6 @@ import { connect } from 'react-redux';
 import { IRootState } from '../../../store';
 import { SELECT_SAMPLE } from '../../../store/actionsTypes';
 import momentJs from 'moment';
-import Pagination from 'material-ui-flat-pagination';
 import { ISample } from '../../../db/schema';
 import { Sample } from '../../../lib/sample';
 
@@ -48,14 +48,14 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const Samples: React.FC<PatientProps> = (props: PatientProps) => {
 	const classes = useStyles();
-	const sampleService: Sample = new Sample();
-	sampleService.setPerPage = 6;
 	const [ selectedSample, setSelectedSample ] = useState();
 	const [ pager, setPager ] = useState<Pager>({
 		page: 1,
-		offset: 0,
+		perPage: 5,
 		total: 0
 	});
+	const sampleService: Sample = new Sample();
+	sampleService.setPerPage = pager.perPage;
 	const [ samples, setSamples ] = useState<ISample[]>([]);
 	const [ fromDate, setFromDate ] = useState(momentJs().subtract(1, 'year').toDate());
 	const [ toDate, setToDate ] = useState(new Date());
@@ -64,14 +64,24 @@ const Samples: React.FC<PatientProps> = (props: PatientProps) => {
 		() => {
 			let samples = getSamples();
 			if (samples.length > 1) {
-				setPager({ page: 1, offset: 0, total: sampleService.items.length });
+				setPager({ ...pager, total: sampleService.items.length });
 				setSamples(samples);
 			} else {
 				setSamples(samples);
-				setPager({ page: 1, offset: 0, total: sampleService.items.length });
+				setPager({ ...pager, page: 1, total: sampleService.items.length });
 			}
 		},
 		[ props.patientId, fromDate, toDate ]
+	);
+
+	useEffect(
+		() => {
+			const samples: ISample[] = getSamples();
+			if (samples.length > 1) {
+				setSamples(samples);
+			}
+		},
+		[ pager.page, pager.perPage ]
 	);
 
 	const getSamples = (): ISample[] => {
@@ -83,17 +93,6 @@ const Samples: React.FC<PatientProps> = (props: PatientProps) => {
 			}
 		}
 		return [];
-	};
-
-	const handlePageChange = (e: React.MouseEvent<HTMLElement>, offset: number, page: number) => {
-		setPager({
-			...pager,
-			page: page,
-			offset
-		});
-		if (props.patientId) {
-			setSamples(sampleService.getByPatient(props.patientId, page));
-		}
 	};
 
 	const handleRowClick = (e: React.MouseEvent<HTMLElement>, id: number) => {
@@ -144,6 +143,19 @@ const Samples: React.FC<PatientProps> = (props: PatientProps) => {
 		</MuiPickersUtilsProvider>
 	);
 
+	const handleChangePage = (e: React.MouseEvent<HTMLButtonElement> | null, page: number) => {
+		// Page received is zero based while api page is not
+		setPager({
+			...pager,
+			page: page + 1
+		});
+	};
+
+	const handleChangePerPage = (e: React.ChangeEvent<HTMLInputElement>) => {
+		sampleService.setPerPage = parseInt(e.target.value);
+		setPager({ ...pager, page: 1, perPage: parseInt(e.target.value) });
+	};
+
 	const dataTable = (
 		<div>
 			{props.title && !props.showDatePicker ? <Typography variant="h5">{props.title}</Typography> : null}
@@ -172,14 +184,22 @@ const Samples: React.FC<PatientProps> = (props: PatientProps) => {
 						))}
 					</TableBody>
 				</Table>
+				<TablePagination
+					rowsPerPageOptions={[ 5, 10, 25 ]}
+					component="div"
+					count={pager.total}
+					rowsPerPage={pager.perPage}
+					page={pager.page - 1}
+					backIconButtonProps={{
+						'aria-label': 'previous page'
+					}}
+					nextIconButtonProps={{
+						'aria-label': 'next page'
+					}}
+					onChangePage={handleChangePage}
+					onChangeRowsPerPage={handleChangePerPage}
+				/>
 			</div>
-			<Pagination
-				limit={sampleService.perPage}
-				offset={pager.offset}
-				total={pager.total}
-				currentPageColor="primary"
-				onClick={handlePageChange}
-			/>
 		</div>
 	);
 
@@ -212,7 +232,7 @@ interface PatientProps {
 	onSelect: (id: number) => void;
 }
 
-type Pager = { page: number; offset: number; total: number };
+type Pager = { page: number; perPage: number; total: number };
 
 const mapStateToProps = (state: IRootState) => {
 	return {
