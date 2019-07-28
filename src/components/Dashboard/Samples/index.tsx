@@ -49,26 +49,31 @@ const Samples: React.FC<PatientProps> = (props: PatientProps) => {
 	const sampleService: Sample = new Sample();
 	sampleService.setPerPage = 6;
 	const [ selectedSample, setSelectedSample ] = useState();
-	const [ pageOffset, setPageOffset ] = useState(0);
-	const [ currentPage, setCurrentPage ] = useState(1);
-	const [ samples, setSamples ] = useState(
-		props.patientId ? sampleService.getByPatient(props.patientId, currentPage) : []
-	);
+	const [ pager, setPager ] = useState<Pager>({
+		currentPage: 1,
+		offset: 0,
+		total: 0
+	});
+	const [ samples, setSamples ] = useState<ISample[]>([]);
 	const [ hasData, setHasData ] = useState(false);
 	const [ fromDate, setFromDate ] = useState(new Date('1 Jan 2019'));
 	const [ toDate, setToDate ] = useState(new Date());
 
 	useEffect(
 		() => {
-			setSamples(props.patientId ? sampleService.getByPatient(props.patientId, currentPage) : []);
+			setSamples(props.patientId ? sampleService.getByPatient(props.patientId, pager.currentPage) : []);
 			setHasData(samples.length > 0);
+			setPager({ ...pager, total: sampleService.items.length });
 		},
-		[ props.patientId, currentPage, samples, hasData, sampleService ]
+		[ props.patientId, pager.currentPage, sampleService ]
 	);
 
 	const handlePageChange = (e: React.MouseEvent<HTMLElement>, offset: number, page: number) => {
-		setCurrentPage(page);
-		setPageOffset(offset);
+		setPager({
+			...pager,
+			currentPage: page,
+			offset
+		});
 		if (props.patientId) {
 			setSamples(sampleService.getByPatient(props.patientId, page));
 		}
@@ -147,8 +152,8 @@ const Samples: React.FC<PatientProps> = (props: PatientProps) => {
 			</div>
 			<Pagination
 				limit={sampleService.perPage}
-				offset={pageOffset}
-				total={sampleService.items.length}
+				offset={pager.offset}
+				total={pager.total}
 				currentPageColor="primary"
 				onClick={handlePageChange}
 			/>
@@ -174,6 +179,8 @@ interface PatientProps {
 	showDatePicker?: boolean;
 	onSelect: (id: number) => void;
 }
+
+type Pager = { currentPage: number; offset: number; total: number };
 
 const mapStateToProps = (state: IRootState) => {
 	return {
