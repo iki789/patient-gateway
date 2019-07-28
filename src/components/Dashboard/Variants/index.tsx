@@ -27,7 +27,10 @@ const useStyles = makeStyles((theme: Theme) =>
 			marginRight: -theme.spacing(2)
 		},
 		placeholder: {
-			color: theme.palette.grey[300]
+			color: theme.palette.grey[300],
+			textAlign: 'center',
+			marginTop: '55%',
+			marginBottom: '55%'
 		},
 		selected: {
 			backgroundColor: `${theme.palette.primary.light} !important`
@@ -96,6 +99,11 @@ const Variants: React.FC<PatientProps> = (props: PatientProps) => {
 		});
 	};
 
+	const handleChangePerPage = (e: React.ChangeEvent<HTMLInputElement>) => {
+		variantService.setPerPage = parseInt(e.target.value);
+		setPager({ ...pager, page: 1, perPage: parseInt(e.target.value) });
+	};
+
 	const dataTable = (
 		<div>
 			<Typography variant="h5">Variants</Typography>
@@ -154,17 +162,13 @@ const Variants: React.FC<PatientProps> = (props: PatientProps) => {
 					'aria-label': 'next page'
 				}}
 				onChangePage={handleChangePage}
-				onChangeRowsPerPage={(e: React.ChangeEvent<HTMLInputElement>) => {
-					variantService.setPerPage = parseInt(e.target.value);
-					console.log(variants, variantService.perPage);
-					setPager({ ...pager, page: 1, perPage: parseInt(e.target.value) });
-				}}
+				onChangeRowsPerPage={handleChangePerPage}
 			/>
 		</div>
 	);
 
 	const placeholder = (
-		<Grid container justify="center" alignContent="center" style={{ height: '100%' }}>
+		<Grid container justify="center" alignContent="center">
 			<Grid item>
 				<Typography variant="h5" className={classes.placeholder}>
 					{props.sampleId ? 'Sample has no variants' : 'Select sample to view variants'}

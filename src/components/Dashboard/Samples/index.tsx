@@ -27,8 +27,7 @@ const useStyles = makeStyles((theme: Theme) =>
 			overflow: 'hidden',
 			overflowX: 'scroll',
 			marginLeft: -theme.spacing(2),
-			marginRight: -theme.spacing(2),
-			height: 358
+			marginRight: -theme.spacing(2)
 		},
 		hover: {
 			'&:hover': {
@@ -38,8 +37,8 @@ const useStyles = makeStyles((theme: Theme) =>
 		placeholder: {
 			color: theme.palette.grey[300],
 			textAlign: 'center',
-			marginTop: theme.spacing(4),
-			marginBottom: theme.spacing(4)
+			marginTop: '55%',
+			marginBottom: '55%'
 		},
 		selected: {
 			backgroundColor: `${theme.palette.primary.light} !important`
@@ -185,7 +184,7 @@ const Samples: React.FC<PatientProps> = (props: PatientProps) => {
 	);
 
 	const placeholder = (
-		<Grid container justify="center" alignContent="center" style={{ height: '100%' }}>
+		<Grid container justify="center" alignContent="center">
 			<Grid item>
 				<Typography variant="h5" className={classes.placeholder}>
 					{props.patientId ? (
