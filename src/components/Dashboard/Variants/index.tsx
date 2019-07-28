@@ -39,21 +39,36 @@ const Variants: React.FC<PatientProps> = (props: PatientProps) => {
 	const classes = useStyles();
 	const variantService: Variant = new Variant();
 	variantService.setPerPage = 6;
+	const [ pager, setPager ] = useState<Pager>({
+		page: 1,
+		offset: 0,
+		total: 0
+	});
 	const [ variants, setVariants ] = useState(props.sampleId ? variantService.getBySampleId(props.sampleId, 0) : []);
-	const [ currentPage, setCurrentPage ] = useState(1);
-	const [ pageOffset, setPageOffset ] = useState(0);
 
 	useEffect(
 		() => {
-			setVariants(props.sampleId ? variantService.getBySampleId(props.sampleId, currentPage) : []);
+			const variants: IVariant[] = getVariants();
+			if (variants.length > 1) {
+				setPager({ page: 1, offset: 0, total: variantService.items.length });
+				setVariants(variants);
+			} else {
+				setVariants(variants);
+				setPager({ page: 1, offset: 0, total: variantService.items.length });
+			}
 		},
-		[ variants, currentPage, props.sampleId, variantService ]
+		[ props.sampleId ]
 	);
 
+	const getVariants = (): IVariant[] => {
+		if (props.sampleId) {
+			return variantService.getBySampleId(props.sampleId, pager.page);
+		}
+		return [];
+	};
+
 	const handlePageChange = (e: React.MouseEvent<HTMLElement>, offset: number, page: number) => {
-		setPageOffset(offset);
-		setCurrentPage(page);
-		setVariants(props.sampleId ? variantService.getBySampleId(props.sampleId, page) : []);
+		setPager({ ...pager, page, offset });
 	};
 
 	const dataTable = (
@@ -87,8 +102,8 @@ const Variants: React.FC<PatientProps> = (props: PatientProps) => {
 			</div>
 			<Pagination
 				limit={variantService.perPage}
-				offset={pageOffset}
-				total={variantService.items.length}
+				offset={pager.offset}
+				total={pager.total}
 				currentPageColor="primary"
 				onClick={handlePageChange}
 			/>
@@ -118,6 +133,8 @@ const mapStateToProps = (state: IRootState) => {
 		sampleId: state.patientSamples.sampleId
 	};
 };
+
+type Pager = { page: number; offset: number; total: number };
 
 const connected = connect(mapStateToProps)(Variants);
 

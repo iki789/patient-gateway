@@ -50,7 +50,7 @@ const Samples: React.FC<PatientProps> = (props: PatientProps) => {
 	sampleService.setPerPage = 6;
 	const [ selectedSample, setSelectedSample ] = useState();
 	const [ pager, setPager ] = useState<Pager>({
-		currentPage: 1,
+		page: 1,
 		offset: 0,
 		total: 0
 	});
@@ -60,18 +60,24 @@ const Samples: React.FC<PatientProps> = (props: PatientProps) => {
 
 	useEffect(
 		() => {
-			setSamples(getSamples());
-			setPager({ ...pager, total: sampleService.items.length });
+			let samples = getSamples();
+			if (samples.length > 1) {
+				setPager({ page: 1, offset: 0, total: sampleService.items.length });
+				setSamples(samples);
+			} else {
+				setSamples(samples);
+				setPager({ page: 1, offset: 0, total: sampleService.items.length });
+			}
 		},
-		[ props.patientId, setPager, pager, sampleService ]
+		[ props.patientId, fromDate, toDate ]
 	);
 
 	const getSamples = (): ISample[] => {
 		if (props.patientId) {
 			if (props.showDatePicker) {
-				return sampleService.getBetweenDatesByPatient(fromDate, toDate, props.patientId, pager.currentPage);
+				return sampleService.getBetweenDatesByPatient(fromDate, toDate, props.patientId, pager.page);
 			} else {
-				return sampleService.getByPatient(props.patientId, pager.currentPage);
+				return sampleService.getByPatient(props.patientId, pager.page);
 			}
 		}
 		return [];
@@ -80,7 +86,7 @@ const Samples: React.FC<PatientProps> = (props: PatientProps) => {
 	const handlePageChange = (e: React.MouseEvent<HTMLElement>, offset: number, page: number) => {
 		setPager({
 			...pager,
-			currentPage: page,
+			page: page,
 			offset
 		});
 		if (props.patientId) {
@@ -198,7 +204,7 @@ interface PatientProps {
 	onSelect: (id: number) => void;
 }
 
-type Pager = { currentPage: number; offset: number; total: number };
+type Pager = { page: number; offset: number; total: number };
 
 const mapStateToProps = (state: IRootState) => {
 	return {
