@@ -55,18 +55,27 @@ const Samples: React.FC<PatientProps> = (props: PatientProps) => {
 		total: 0
 	});
 	const [ samples, setSamples ] = useState<ISample[]>([]);
-	const [ hasData, setHasData ] = useState(false);
-	const [ fromDate, setFromDate ] = useState(new Date('1 Jan 2019'));
+	const [ fromDate, setFromDate ] = useState(new Date());
 	const [ toDate, setToDate ] = useState(new Date());
 
 	useEffect(
 		() => {
-			setSamples(props.patientId ? sampleService.getByPatient(props.patientId, pager.currentPage) : []);
-			setHasData(samples.length > 0);
+			setSamples(getSamples());
 			setPager({ ...pager, total: sampleService.items.length });
 		},
-		[ props.patientId, pager.currentPage, sampleService ]
+		[ props.patientId, setPager, pager, sampleService ]
 	);
+
+	const getSamples = (): ISample[] => {
+		if (props.patientId) {
+			if (props.showDatePicker) {
+				return sampleService.getBetweenDatesByPatient(fromDate, toDate, props.patientId, pager.currentPage);
+			} else {
+				return sampleService.getByPatient(props.patientId, pager.currentPage);
+			}
+		}
+		return [];
+	};
 
 	const handlePageChange = (e: React.MouseEvent<HTMLElement>, offset: number, page: number) => {
 		setPager({
@@ -124,7 +133,6 @@ const Samples: React.FC<PatientProps> = (props: PatientProps) => {
 	const dataTable = (
 		<div>
 			{props.title ? <Typography variant="h5">{props.title}</Typography> : null}
-			{props.showDatePicker ? dateRangeSelect : null}
 			<div className={classes.table}>
 				<Table>
 					<TableHead>
@@ -165,13 +173,22 @@ const Samples: React.FC<PatientProps> = (props: PatientProps) => {
 		<Grid container justify="center" alignContent="center" style={{ height: '100%' }}>
 			<Grid item>
 				<Typography variant="h5" className={classes.placeholder}>
-					{props.patientId ? 'Patient has not samples' : 'Select patient to view samples'}
+					{props.patientId ? (
+						`Patient has no samples${props.showDatePicker ? ' in current date range' : ''}`
+					) : (
+						'Select patient to view samples'
+					)}
 				</Typography>
 			</Grid>
 		</Grid>
 	);
 
-	return <React.Fragment>{hasData ? dataTable : placeholder}</React.Fragment>;
+	return (
+		<React.Fragment>
+			{props.showDatePicker && props.patientId ? dateRangeSelect : null}
+			{pager.total > 0 ? dataTable : placeholder}
+		</React.Fragment>
+	);
 };
 
 interface PatientProps {
