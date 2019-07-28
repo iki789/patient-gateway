@@ -55,7 +55,7 @@ const Samples: React.FC<PatientProps> = (props: PatientProps) => {
 		total: 0
 	});
 	const [ samples, setSamples ] = useState<ISample[]>([]);
-	const [ fromDate, setFromDate ] = useState(new Date());
+	const [ fromDate, setFromDate ] = useState(momentJs().subtract(1, 'year').toDate());
 	const [ toDate, setToDate ] = useState(new Date());
 
 	useEffect(
