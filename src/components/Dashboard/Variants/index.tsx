@@ -7,6 +7,7 @@ import {
 	TableBody,
 	TableRow,
 	TableCell,
+	TableSortLabel,
 	TableHead,
 	Theme,
 	Typography
@@ -58,6 +59,16 @@ const Variants: React.FC<PatientProps> = (props: PatientProps) => {
 			}
 		},
 		[ props.sampleId ]
+	);
+
+	useEffect(
+		() => {
+			const variants: IVariant[] = getVariants();
+			if (variants.length > 1) {
+				setVariants(variants);
+			}
+		},
+		[ pager.page ]
 	);
 
 	const getVariants = (): IVariant[] => {
