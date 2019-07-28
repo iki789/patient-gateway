@@ -46,6 +46,10 @@ const Variants: React.FC<PatientProps> = (props: PatientProps) => {
 		total: 0
 	});
 	const [ variants, setVariants ] = useState(props.sampleId ? variantService.getBySampleId(props.sampleId, 0) : []);
+	const [ sort, setSort ] = useState<Sort>({
+		field: 'alleleFrequency',
+		direction: 'desc'
+	});
 
 	useEffect(
 		() => {
@@ -58,7 +62,7 @@ const Variants: React.FC<PatientProps> = (props: PatientProps) => {
 				setPager({ page: 1, offset: 0, total: variantService.items.length });
 			}
 		},
-		[ props.sampleId ]
+		[ props.sampleId, sort ]
 	);
 
 	useEffect(
@@ -73,13 +77,20 @@ const Variants: React.FC<PatientProps> = (props: PatientProps) => {
 
 	const getVariants = (): IVariant[] => {
 		if (props.sampleId) {
-			return variantService.getBySampleId(props.sampleId, pager.page);
+			return variantService.getBySampleId(props.sampleId, pager.page, sort);
 		}
 		return [];
 	};
 
 	const handlePageChange = (e: React.MouseEvent<HTMLElement>, offset: number, page: number) => {
 		setPager({ ...pager, page, offset });
+	};
+
+	const handleSort = (e: React.MouseEvent<HTMLElement>, field: 'alleleFrequency' | 'mutationType') => {
+		setSort({
+			field,
+			direction: sort.field === field && sort.direction === 'asc' ? 'desc' : 'asc'
+		});
 	};
 
 	const dataTable = (
@@ -90,11 +101,27 @@ const Variants: React.FC<PatientProps> = (props: PatientProps) => {
 					<TableHead>
 						<TableRow>
 							<TableCell>Gene</TableCell>
-							<TableCell>Mutation Type</TableCell>
+							<TableCell>
+								<TableSortLabel
+									active={sort.field === 'mutationType'}
+									direction={sort.direction}
+									onClick={(e) => handleSort(e, 'mutationType')}
+								>
+									Mutation Type
+								</TableSortLabel>
+							</TableCell>
 							<TableCell>Position</TableCell>
 							<TableCell>Base</TableCell>
 							<TableCell>Alt. Base</TableCell>
-							<TableCell>Allele ƒ</TableCell>
+							<TableCell>
+								<TableSortLabel
+									active={sort.field === 'alleleFrequency'}
+									direction={sort.direction}
+									onClick={(e) => handleSort(e, 'alleleFrequency')}
+								>
+									Allele ƒ
+								</TableSortLabel>
+							</TableCell>
 						</TableRow>
 					</TableHead>
 					<TableBody>
@@ -146,6 +173,7 @@ const mapStateToProps = (state: IRootState) => {
 };
 
 type Pager = { page: number; offset: number; total: number };
+type Sort = { field: 'mutationType' | 'alleleFrequency'; direction: 'asc' | 'desc' };
 
 const connected = connect(mapStateToProps)(Variants);
 
