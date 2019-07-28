@@ -64,7 +64,7 @@ const Variants: React.FC<PatientProps> = (props: PatientProps) => {
 				setPager({ ...pager, page: 1, total: variantService.items.length });
 			}
 		},
-		[ props.sampleId, sort ]
+		[ props.sampleId, sort, setPager, setVariants ]
 	);
 
 	useEffect(
