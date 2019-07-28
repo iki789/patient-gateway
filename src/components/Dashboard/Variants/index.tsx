@@ -7,6 +7,7 @@ import {
 	TableBody,
 	TableRow,
 	TableCell,
+	TablePagination,
 	TableSortLabel,
 	TableHead,
 	Theme,
@@ -14,7 +15,6 @@ import {
 } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { IRootState } from '../../../store';
-import Pagination from 'material-ui-flat-pagination';
 import { IVariant } from '../../../db/schema';
 import { Variant } from '../../../lib/variants';
 
@@ -24,8 +24,7 @@ const useStyles = makeStyles((theme: Theme) =>
 			overflow: 'hidden',
 			overflowX: 'scroll',
 			marginLeft: -theme.spacing(2),
-			marginRight: -theme.spacing(2),
-			height: 358
+			marginRight: -theme.spacing(2)
 		},
 		placeholder: {
 			color: theme.palette.grey[300]
@@ -38,13 +37,13 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const Variants: React.FC<PatientProps> = (props: PatientProps) => {
 	const classes = useStyles();
-	const variantService: Variant = new Variant();
-	variantService.setPerPage = 6;
 	const [ pager, setPager ] = useState<Pager>({
 		page: 1,
-		offset: 0,
+		perPage: 10,
 		total: 0
 	});
+	const variantService: Variant = new Variant();
+	variantService.setPerPage = pager.perPage;
 	const [ variants, setVariants ] = useState(props.sampleId ? variantService.getBySampleId(props.sampleId, 0) : []);
 	const [ sort, setSort ] = useState<Sort>({
 		field: 'alleleFrequency',
@@ -55,11 +54,11 @@ const Variants: React.FC<PatientProps> = (props: PatientProps) => {
 		() => {
 			const variants: IVariant[] = getVariants();
 			if (variants.length > 1) {
-				setPager({ page: 1, offset: 0, total: variantService.items.length });
+				setPager({ ...pager, page: 1, total: variantService.items.length });
 				setVariants(variants);
 			} else {
 				setVariants(variants);
-				setPager({ page: 1, offset: 0, total: variantService.items.length });
+				setPager({ ...pager, page: 1, total: variantService.items.length });
 			}
 		},
 		[ props.sampleId, sort ]
@@ -72,7 +71,7 @@ const Variants: React.FC<PatientProps> = (props: PatientProps) => {
 				setVariants(variants);
 			}
 		},
-		[ pager.page ]
+		[ pager.page, pager.perPage ]
 	);
 
 	const getVariants = (): IVariant[] => {
@@ -82,14 +81,18 @@ const Variants: React.FC<PatientProps> = (props: PatientProps) => {
 		return [];
 	};
 
-	const handlePageChange = (e: React.MouseEvent<HTMLElement>, offset: number, page: number) => {
-		setPager({ ...pager, page, offset });
-	};
-
 	const handleSort = (e: React.MouseEvent<HTMLElement>, field: 'alleleFrequency' | 'mutationType') => {
 		setSort({
 			field,
 			direction: sort.field === field && sort.direction === 'asc' ? 'desc' : 'asc'
+		});
+	};
+
+	const handleChangePage = (e: React.MouseEvent<HTMLButtonElement> | null, page: number) => {
+		// Page received is zero based while api page is not
+		setPager({
+			...pager,
+			page: page + 1
 		});
 	};
 
@@ -138,12 +141,24 @@ const Variants: React.FC<PatientProps> = (props: PatientProps) => {
 					</TableBody>
 				</Table>
 			</div>
-			<Pagination
-				limit={variantService.perPage}
-				offset={pager.offset}
-				total={pager.total}
-				currentPageColor="primary"
-				onClick={handlePageChange}
+			<TablePagination
+				rowsPerPageOptions={[ 5, 10, 25 ]}
+				component="div"
+				count={pager.total}
+				rowsPerPage={pager.perPage}
+				page={pager.page - 1}
+				backIconButtonProps={{
+					'aria-label': 'previous page'
+				}}
+				nextIconButtonProps={{
+					'aria-label': 'next page'
+				}}
+				onChangePage={handleChangePage}
+				onChangeRowsPerPage={(e: React.ChangeEvent<HTMLInputElement>) => {
+					variantService.setPerPage = parseInt(e.target.value);
+					console.log(variants, variantService.perPage);
+					setPager({ ...pager, page: 1, perPage: parseInt(e.target.value) });
+				}}
 			/>
 		</div>
 	);
@@ -172,7 +187,7 @@ const mapStateToProps = (state: IRootState) => {
 	};
 };
 
-type Pager = { page: number; offset: number; total: number };
+type Pager = { page: number; perPage: number; total: number };
 type Sort = { field: 'mutationType' | 'alleleFrequency'; direction: 'asc' | 'desc' };
 
 const connected = connect(mapStateToProps)(Variants);
