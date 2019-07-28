@@ -3,6 +3,7 @@ import {
 	createStyles,
 	makeStyles,
 	Grid,
+	IconButton,
 	Table,
 	TableBody,
 	TableRow,
@@ -12,6 +13,7 @@ import {
 	Theme,
 	Typography
 } from '@material-ui/core';
+import { Alarm } from '@material-ui/icons';
 import { MuiPickersUtilsProvider, KeyboardDatePicker, MaterialUiPickersDate } from '@material-ui/pickers';
 import moment from '@date-io/moment';
 import { connect } from 'react-redux';
@@ -156,9 +158,22 @@ const Samples: React.FC<PatientProps> = (props: PatientProps) => {
 		setPager({ ...pager, page: 1, perPage: parseInt(e.target.value) });
 	};
 
+	const header = (
+		<Grid container>
+			<Grid item style={{ flexGrow: 1 }}>
+				<Typography variant="h5">{props.title}</Typography>
+			</Grid>
+			<Grid item>
+				<IconButton style={{ marginTop: -8 }}>
+					<Alarm />
+				</IconButton>
+			</Grid>
+		</Grid>
+	);
+
 	const dataTable = (
 		<div>
-			{props.title && !props.showDatePicker ? <Typography variant="h5">{props.title}</Typography> : null}
+			{props.title && !props.showDatePicker ? header : null}
 			<div className={classes.table}>
 				<Table>
 					<TableHead>
