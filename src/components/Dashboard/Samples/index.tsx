@@ -80,6 +80,7 @@ const Samples: React.FC<PatientProps> = (props: PatientProps) => {
 	};
 
 	const handleRowClick = (e: React.MouseEvent<HTMLElement>, id: number) => {
+		if (props.showDatePicker) return;
 		setSelectedSample(id);
 		props.onSelect(id);
 	};
@@ -138,7 +139,7 @@ const Samples: React.FC<PatientProps> = (props: PatientProps) => {
 							<TableRow
 								hover={true}
 								classes={{ selected: classes.selected, hover: classes.hover }}
-								selected={selectedSample === s.id}
+								selected={props.showDatePicker ? false : selectedSample === s.id}
 								key={s.id}
 								onClick={(e) => handleRowClick(e, s.id)}
 							>
