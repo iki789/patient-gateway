@@ -13,6 +13,11 @@ class Dashboard extends Component<IDashboard & RouteComponentProps> {
 		}
 	}
 
+	logout = () => {
+		Auth.logout();
+		this.props.history.push('/login');
+	};
+
 	render() {
 		return (
 			<React.Fragment>
@@ -24,7 +29,9 @@ class Dashboard extends Component<IDashboard & RouteComponentProps> {
 									<Typography>Patient Gateway</Typography>
 								</Grid>
 								<Grid item>
-									<Button style={{ color: '#fff' }}>Logout</Button>
+									<Button style={{ color: '#fff' }} onClick={this.logout}>
+										Logout
+									</Button>
 								</Grid>
 							</Grid>
 						</Container>
