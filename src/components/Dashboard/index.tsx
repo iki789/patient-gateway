@@ -5,7 +5,6 @@ import { Auth } from '../../lib/auth';
 import { Patients } from './Patients';
 import { Samples } from './Samples';
 import { Variants } from './Variants';
-import { SamplesChart } from './SamplesChart';
 
 class Dashboard extends Component<IDashboard & RouteComponentProps> {
 	componentDidMount() {
@@ -35,23 +34,16 @@ class Dashboard extends Component<IDashboard & RouteComponentProps> {
 						<Grid item xs={12}>
 							<Patients />
 						</Grid>
+					</Grid>
+					<Grid container spacing={2}>
 						<Grid item xs={12} md={4}>
 							<Paper className={this.props.classes.paper}>
-								<Samples />
+								<Samples title="Patient Samples" />
 							</Paper>
 						</Grid>
 						<Grid item xs={12} md={8}>
 							<Paper className={this.props.classes.paper}>
 								<Variants onSelect={this.hanldePatientSelect} />
-							</Paper>
-						</Grid>
-					</Grid>
-				</Container>
-				<Container className={this.props.classes.container}>
-					<Grid container spacing={2}>
-						<Grid item xs={12}>
-							<Paper className={this.props.classes.paper}>
-								<SamplesChart />
 							</Paper>
 						</Grid>
 					</Grid>
@@ -71,8 +63,7 @@ let styles = (theme: Theme) => {
 			marginTop: '1rem'
 		},
 		paper: {
-			padding: theme.spacing(2),
-			height: 410
+			padding: theme.spacing(2)
 		}
 	};
 };

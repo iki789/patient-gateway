@@ -166,7 +166,7 @@ const Samples: React.FC<PatientProps> = (props: PatientProps) => {
 							<TableRow
 								hover={true}
 								classes={{ selected: classes.selected, hover: classes.hover }}
-								selected={props.showDatePicker ? false : selectedSample === s.id}
+								selected={selectedSample === s.id}
 								key={s.id}
 								onClick={(e) => handleRowClick(e, s.id)}
 							>
@@ -223,7 +223,6 @@ const Samples: React.FC<PatientProps> = (props: PatientProps) => {
 interface PatientProps {
 	patientId: number | null;
 	title?: string;
-	showDatePicker?: boolean;
 	onSelect: (id: number) => void;
 }
 
