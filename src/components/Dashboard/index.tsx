@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
-import { Container, Grid, AppBar, Paper, Toolbar, Typography, Theme, withStyles } from '@material-ui/core';
+import { Button, Container, Grid, AppBar, Paper, Toolbar, Typography, Theme, withStyles } from '@material-ui/core';
 import { Auth } from '../../lib/auth';
 import { Patients } from './Patients';
 import { Samples } from './Samples';
@@ -22,7 +22,16 @@ class Dashboard extends Component<IDashboard & RouteComponentProps> {
 			<React.Fragment>
 				<AppBar position="static">
 					<Toolbar>
-						<Typography>Patient Gateway</Typography>
+						<Container>
+							<Grid container alignItems="center">
+								<Grid item style={{ flexGrow: 1 }}>
+									<Typography>Patient Gateway</Typography>
+								</Grid>
+								<Grid item>
+									<Button style={{ color: '#fff' }}>Logout</Button>
+								</Grid>
+							</Grid>
+						</Container>
 					</Toolbar>
 				</AppBar>
 				<Container className={this.props.classes.container}>
@@ -60,7 +69,7 @@ interface IDashboard {
 let styles = (theme: Theme) => {
 	return {
 		container: {
-			marginTop: '1rem'
+			marginTop: theme.spacing(4)
 		},
 		paper: {
 			padding: theme.spacing(2)
