@@ -1,4 +1,3 @@
-import moment from 'moment';
 import { Pagination } from './pagination';
 import { Samples as SamplesDB, ISample } from '../db/index';
 
@@ -22,10 +21,8 @@ export class Sample extends Pagination implements IBase {
 
 	getByPatientId(patientId: number | undefined, page: number, sort: Sort): ISample[] {
 		if (!patientId) return [];
-		let samples: ISample[] = [];
-		this.items = this.samples;
-		samples = this.items = this.samples.filter((s) => s.patientId === patientId);
-		this.sort(samples, sort);
+		this.items = this.samples.filter((s) => s.patientId === patientId);
+		this.sort(this.items, sort);
 		return this.getItemsOnPage(page);
 	}
 
