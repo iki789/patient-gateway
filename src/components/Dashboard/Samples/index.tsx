@@ -201,7 +201,7 @@ const Samples: React.FC<PatientProps> = (props: PatientProps) => {
 			{!props.patientId ? 'Select patient to view samples' : ''}
 			{props.patientId && samples.length < 1 ? 'Patient has no samples' : ''}
 			{props.patientId && datePicker.use ? ` in current date range` : ''}
-
+			<br />
 			{props.patientId && datePicker.use ? datePickerButton : ''}
 		</Typography>
 	);
