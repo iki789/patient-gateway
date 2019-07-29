@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import {
 	createStyles,
 	makeStyles,
@@ -20,7 +20,10 @@ import { IRootState } from '../../../store';
 import { SELECT_SAMPLE } from '../../../store/actionsTypes';
 import { ISample } from '../../../db/schema';
 import { Sample } from '../../../lib/sample';
-import { CalendarPopover, Dates } from './calendarPopover';
+import { Dates } from './calendarPopover';
+const CalendarPopover = React.lazy(() =>
+	import('./calendarPopover').then((module) => ({ default: module.CalendarPopover }))
+);
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
@@ -143,7 +146,7 @@ const Samples: React.FC<PatientProps> = (props: PatientProps) => {
 	const header = (
 		<Grid container>
 			<Grid item style={{ flexGrow: 1 }}>
-				<Typography variant="h5">{props.title}</Typography>
+				<Typography variant="h5">Samples</Typography>
 			</Grid>
 			<Grid item>{datePickerButton}</Grid>
 		</Grid>
@@ -151,7 +154,7 @@ const Samples: React.FC<PatientProps> = (props: PatientProps) => {
 
 	const dataTable = (
 		<div>
-			{props.title || datePicker.use ? header : null}
+			{header}
 			<div className={classes.table}>
 				<Table>
 					<TableHead>
@@ -214,7 +217,9 @@ const Samples: React.FC<PatientProps> = (props: PatientProps) => {
 
 	return (
 		<div className={classes.wrapper}>
-			<CalendarPopover show={showDatePicker} onCancel={handleCalendarCancel} onChange={handleCalendarChange} />
+			<Suspense fallback={<div />}>
+				<CalendarPopover show={showDatePicker} onCancel={handleCalendarCancel} onChange={handleCalendarChange} />
+			</Suspense>
 			{pager.total > 0 ? dataTable : placeholder}
 		</div>
 	);
@@ -222,7 +227,6 @@ const Samples: React.FC<PatientProps> = (props: PatientProps) => {
 
 interface PatientProps {
 	patientId: number | null;
-	title?: string;
 	onSelect: (id: number) => void;
 }
 
