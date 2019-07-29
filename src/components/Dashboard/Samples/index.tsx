@@ -78,13 +78,17 @@ const Samples: React.FC<PatientProps> = (props: PatientProps) => {
 
 	useEffect(
 		() => {
-			let samples = getSamples();
+			console.log('');
+			function getSamples(): ISample[] {
+				if (props.patientId) {
+					return sampleService.getByPatientId(props.patientId, pager.page, sort);
+				}
+				return [];
+			}
+			const samples = getSamples();
 			if (samples.length > 0) {
 				setPager({ ...pager, total: sampleService.items.length });
 				setSamples(samples);
-			} else {
-				setSamples(samples);
-				setPager({ ...pager, page: 1, total: sampleService.items.length });
 			}
 		},
 		[ props.patientId, datePicker, sort ]
@@ -92,6 +96,12 @@ const Samples: React.FC<PatientProps> = (props: PatientProps) => {
 
 	useEffect(
 		() => {
+			function getSamples(): ISample[] {
+				if (props.patientId) {
+					return sampleService.getByPatientId(props.patientId, pager.page, sort);
+				}
+				return [];
+			}
 			const samples: ISample[] = getSamples();
 			if (samples.length > 0) {
 				setSamples(samples);
@@ -99,13 +109,6 @@ const Samples: React.FC<PatientProps> = (props: PatientProps) => {
 		},
 		[ pager.page, pager.perPage ]
 	);
-
-	const getSamples = (): ISample[] => {
-		if (props.patientId) {
-			return sampleService.getByPatientId(props.patientId, pager.page, sort);
-		}
-		return [];
-	};
 
 	const handleRowClick = (e: React.MouseEvent<HTMLElement>, id: number) => {
 		setSelectedSample(id);
@@ -150,12 +153,12 @@ const Samples: React.FC<PatientProps> = (props: PatientProps) => {
 		</Grid>
 	);
 
-	const handleSort = (field: SortFields) =>{
+	const handleSort = (field: SortFields) => {
 		setSort({
 			field,
 			direction: sort.field === field && sort.direction === 'asc' ? 'desc' : 'asc'
 		});
-	}
+	};
 
 	const dataTable = (
 		<div>
@@ -165,17 +168,29 @@ const Samples: React.FC<PatientProps> = (props: PatientProps) => {
 					<TableHead>
 						<TableRow>
 							<TableCell>
-								<TableSortLabel active={sort.field === 'sampleType'} direction={sort.direction} onClick={()=>handleSort('sampleType')}>
+								<TableSortLabel
+									active={sort.field === 'sampleType'}
+									direction={sort.direction}
+									onClick={() => handleSort('sampleType')}
+								>
 									Type
 								</TableSortLabel>
 							</TableCell>
 							<TableCell>
-								<TableSortLabel active={sort.field === 'quality'} direction={sort.direction} onClick={()=>handleSort('quality')}>
+								<TableSortLabel
+									active={sort.field === 'quality'}
+									direction={sort.direction}
+									onClick={() => handleSort('quality')}
+								>
 									Quality
 								</TableSortLabel>
 							</TableCell>
 							<TableCell title="MM/DD/YY">
-								<TableSortLabel active={sort.field === 'date'} direction={sort.direction} onClick={()=>handleSort('date')}>
+								<TableSortLabel
+									active={sort.field === 'date'}
+									direction={sort.direction}
+									onClick={() => handleSort('date')}
+								>
 									Date
 								</TableSortLabel>
 							</TableCell>
