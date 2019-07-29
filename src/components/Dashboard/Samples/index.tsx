@@ -14,17 +14,19 @@ import {
 	Typography
 } from '@material-ui/core';
 import { Alarm } from '@material-ui/icons';
-import { MuiPickersUtilsProvider, KeyboardDatePicker, MaterialUiPickersDate } from '@material-ui/pickers';
-import moment from '@date-io/moment';
 import { connect } from 'react-redux';
+import momentJs from 'moment';
 import { IRootState } from '../../../store';
 import { SELECT_SAMPLE } from '../../../store/actionsTypes';
-import momentJs from 'moment';
 import { ISample } from '../../../db/schema';
 import { Sample } from '../../../lib/sample';
+import { CalendarPopover, Dates } from './calendarPopover';
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
+		wrapper: {
+			position: 'relative'
+		},
 		table: {
 			overflow: 'hidden',
 			overflowX: 'scroll',
@@ -35,6 +37,9 @@ const useStyles = makeStyles((theme: Theme) =>
 			'&:hover': {
 				cursor: 'pointer'
 			}
+		},
+		activePicker: {
+			color: theme.palette.primary.main
 		},
 		placeholder: {
 			color: theme.palette.grey[300],
@@ -51,6 +56,12 @@ const useStyles = makeStyles((theme: Theme) =>
 const Samples: React.FC<PatientProps> = (props: PatientProps) => {
 	const classes = useStyles();
 	const [ selectedSample, setSelectedSample ] = useState();
+	const [ datePicker, setDatePicker ] = useState<Dates & { use: boolean }>({
+		use: false,
+		from: new Date(),
+		to: new Date()
+	});
+	const [ showDatePicker, setShowDatePicker ] = useState(false);
 	const [ pager, setPager ] = useState<Pager>({
 		page: 1,
 		perPage: 5,
@@ -59,8 +70,6 @@ const Samples: React.FC<PatientProps> = (props: PatientProps) => {
 	const sampleService: Sample = new Sample();
 	sampleService.setPerPage = pager.perPage;
 	const [ samples, setSamples ] = useState<ISample[]>([]);
-	const [ fromDate, setFromDate ] = useState(momentJs().subtract(1, 'year').toDate());
-	const [ toDate, setToDate ] = useState(new Date());
 
 	useEffect(
 		() => {
@@ -73,7 +82,7 @@ const Samples: React.FC<PatientProps> = (props: PatientProps) => {
 				setPager({ ...pager, page: 1, total: sampleService.items.length });
 			}
 		},
-		[ props.patientId, fromDate, toDate ]
+		[ props.patientId ]
 	);
 
 	useEffect(
@@ -89,7 +98,7 @@ const Samples: React.FC<PatientProps> = (props: PatientProps) => {
 	const getSamples = (): ISample[] => {
 		if (props.patientId) {
 			if (props.showDatePicker) {
-				return sampleService.getBetweenDatesByPatient(fromDate, toDate, props.patientId, pager.page);
+				// return sampleService.getBetweenDatesByPatient(fromDate, toDate, props.patientId, pager.page);
 			} else {
 				return sampleService.getByPatient(props.patientId, pager.page);
 			}
@@ -102,48 +111,6 @@ const Samples: React.FC<PatientProps> = (props: PatientProps) => {
 		setSelectedSample(id);
 		props.onSelect(id);
 	};
-
-	const handleFromDateChange = (date: MaterialUiPickersDate) => {
-		if (date) {
-			setFromDate(new Date(date.format('MMM DD YYYY')));
-		}
-	};
-
-	const handleToDateChange = (date: MaterialUiPickersDate) => {
-		if (date) {
-			setToDate(new Date(date.format('MMM DD YYYY')));
-		}
-	};
-
-	const dateRangeSelect = (
-		<MuiPickersUtilsProvider utils={moment}>
-			<Grid container spacing={2}>
-				{props.title ? <Typography variant="h5">props.title</Typography> : null}
-				<Grid item>
-					<KeyboardDatePicker
-						disableFuture
-						openTo="year"
-						format="DD MMM YYYY"
-						label="From"
-						views={[ 'year', 'month', 'date' ]}
-						value={fromDate}
-						onChange={handleFromDateChange}
-					/>
-				</Grid>
-				<Grid item>
-					<KeyboardDatePicker
-						disableFuture
-						openTo="year"
-						format="DD MMM YYYY"
-						label="To"
-						views={[ 'year', 'month', 'date' ]}
-						value={toDate}
-						onChange={handleToDateChange}
-					/>
-				</Grid>
-			</Grid>
-		</MuiPickersUtilsProvider>
-	);
 
 	const handleChangePage = (e: React.MouseEvent<HTMLButtonElement> | null, page: number) => {
 		// Page received is zero based while api page is not
@@ -158,14 +125,24 @@ const Samples: React.FC<PatientProps> = (props: PatientProps) => {
 		setPager({ ...pager, page: 1, perPage: parseInt(e.target.value) });
 	};
 
+	const handleCalendarChange = (dates: Dates) => {
+		setDatePicker({ use: true, from: dates.from, to: dates.to });
+		setShowDatePicker(false);
+	};
+
+	const handleCalendarCancel = () => {
+		setDatePicker({ ...datePicker, use: false });
+		setShowDatePicker(false);
+	};
+
 	const header = (
 		<Grid container>
 			<Grid item style={{ flexGrow: 1 }}>
 				<Typography variant="h5">{props.title}</Typography>
 			</Grid>
 			<Grid item>
-				<IconButton style={{ marginTop: -8 }}>
-					<Alarm />
+				<IconButton style={{ marginTop: -8 }} onClick={() => setShowDatePicker(true)}>
+					<Alarm className={datePicker.use ? classes.activePicker : ''} />
 				</IconButton>
 			</Grid>
 		</Grid>
@@ -233,10 +210,10 @@ const Samples: React.FC<PatientProps> = (props: PatientProps) => {
 	);
 
 	return (
-		<React.Fragment>
-			{props.showDatePicker && props.patientId ? dateRangeSelect : null}
+		<div className={classes.wrapper}>
+			<CalendarPopover show={showDatePicker} onCancel={handleCalendarCancel} onChange={handleCalendarChange} />
 			{pager.total > 0 ? dataTable : placeholder}
-		</React.Fragment>
+		</div>
 	);
 };
 
