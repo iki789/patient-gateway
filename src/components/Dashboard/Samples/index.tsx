@@ -13,7 +13,7 @@ import {
 	Theme,
 	Typography
 } from '@material-ui/core';
-import { Alarm } from '@material-ui/icons';
+import { DateRange } from '@material-ui/icons';
 import { connect } from 'react-redux';
 import momentJs from 'moment';
 import { IRootState } from '../../../store';
@@ -136,7 +136,7 @@ const Samples: React.FC<PatientProps> = (props: PatientProps) => {
 
 	const datePickerButton = (
 		<IconButton style={{ marginTop: -8 }} onClick={() => setShowDatePicker(true)}>
-			<Alarm className={datePicker.use ? classes.activePicker : ''} />
+			<DateRange className={datePicker.use ? classes.activePicker : ''} />
 		</IconButton>
 	);
 
@@ -179,20 +179,20 @@ const Samples: React.FC<PatientProps> = (props: PatientProps) => {
 				</Table>
 			</div>
 			<TablePagination
-					rowsPerPageOptions={[ 5, 10, 25 ]}
-					component="div"
-					count={pager.total}
-					rowsPerPage={pager.perPage}
-					page={pager.page - 1}
-					backIconButtonProps={{
-						'aria-label': 'previous page'
-					}}
-					nextIconButtonProps={{
-						'aria-label': 'next page'
-					}}
-					onChangePage={handleChangePage}
-					onChangeRowsPerPage={handleChangePerPage}
-				/>
+				rowsPerPageOptions={[ 5, 10, 25 ]}
+				component="div"
+				count={pager.total}
+				rowsPerPage={pager.perPage}
+				page={pager.page - 1}
+				backIconButtonProps={{
+					'aria-label': 'previous page'
+				}}
+				nextIconButtonProps={{
+					'aria-label': 'next page'
+				}}
+				onChangePage={handleChangePage}
+				onChangeRowsPerPage={handleChangePerPage}
+			/>
 		</div>
 	);
 
