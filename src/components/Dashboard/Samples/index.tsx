@@ -10,6 +10,7 @@ import {
 	TableCell,
 	TablePagination,
 	TableHead,
+	TableSortLabel,
 	Theme,
 	Typography
 } from '@material-ui/core';
@@ -19,7 +20,7 @@ import momentJs from 'moment';
 import { IRootState } from '../../../store';
 import { SELECT_SAMPLE } from '../../../store/actionsTypes';
 import { ISample } from '../../../db/schema';
-import { Sample, Sort } from '../../../lib/sample';
+import { Sample, Sort, SortFields } from '../../../lib/sample';
 import { Dates } from './calendarPopover';
 const CalendarPopover = React.lazy(() =>
 	import('./calendarPopover').then((module) => ({ default: module.CalendarPopover }))
@@ -86,7 +87,7 @@ const Samples: React.FC<PatientProps> = (props: PatientProps) => {
 				setPager({ ...pager, page: 1, total: sampleService.items.length });
 			}
 		},
-		[ props.patientId, datePicker ]
+		[ props.patientId, datePicker, sort ]
 	);
 
 	useEffect(
@@ -149,6 +150,13 @@ const Samples: React.FC<PatientProps> = (props: PatientProps) => {
 		</Grid>
 	);
 
+	const handleSort = (field: SortFields) =>{
+		setSort({
+			field,
+			direction: sort.field === field && sort.direction === 'asc' ? 'desc' : 'asc'
+		});
+	}
+
 	const dataTable = (
 		<div>
 			{header}
@@ -156,9 +164,21 @@ const Samples: React.FC<PatientProps> = (props: PatientProps) => {
 				<Table>
 					<TableHead>
 						<TableRow>
-							<TableCell>Type</TableCell>
-							<TableCell>Quality</TableCell>
-							<TableCell>MM/DD/YY</TableCell>
+							<TableCell>
+								<TableSortLabel active={sort.field === 'sampleType'} direction={sort.direction} onClick={()=>handleSort('sampleType')}>
+									Type
+								</TableSortLabel>
+							</TableCell>
+							<TableCell>
+								<TableSortLabel active={sort.field === 'quality'} direction={sort.direction} onClick={()=>handleSort('quality')}>
+									Quality
+								</TableSortLabel>
+							</TableCell>
+							<TableCell title="MM/DD/YY">
+								<TableSortLabel active={sort.field === 'date'} direction={sort.direction} onClick={()=>handleSort('date')}>
+									Date
+								</TableSortLabel>
+							</TableCell>
 						</TableRow>
 					</TableHead>
 					<TableBody>
