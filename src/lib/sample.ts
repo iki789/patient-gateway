@@ -22,9 +22,11 @@ export class Sample extends Pagination implements IBase {
 
 	getByPatient(patientId: number | undefined, page: number): ISample[] {
 		if (!patientId) return [];
+		let samples: ISample[] = [];
 		this.items = this.samples;
-		this.items = this.samples.filter((s) => s.patientId === patientId);
-		return this.sortByDate(this.getItemsOnPage(page));
+		samples = this.items = this.samples.filter((s) => s.patientId === patientId);
+		this.sortByDate(samples);
+		return this.getItemsOnPage(page);
 	}
 
 	getBetweenDatesByPatient(from: Date, to: Date, patientId: number, page: number): ISample[] {
