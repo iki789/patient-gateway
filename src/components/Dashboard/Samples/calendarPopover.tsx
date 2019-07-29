@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme: Theme) => {
 
 export const CalendarPopover = (props: CalendarPopoverProps) => {
 	const classes = useStyles();
-	const [ dates, setDates ] = useState<{ from: Date; to: Date }>({
+	const [ dates, setDates ] = useState<Dates>({
 		from: momentJs().subtract(6, 'months').toDate(),
 		to: momentJs().toDate()
 	});
@@ -41,9 +41,17 @@ export const CalendarPopover = (props: CalendarPopoverProps) => {
 		}
 	};
 
+	const handleChange = () => {
+		props.onChange(dates);
+	};
+
+	const handleClose = () => {
+		props.onCancel();
+	};
+
 	return (
 		<MuiPickersUtilsProvider utils={moment}>
-			<Zoom in={true}>
+			<Zoom in={props.show}>
 				<div className={classes.root}>
 					<Grid container spacing={2} alignContent="center" style={{ textAlign: 'center' }}>
 						<Grid item xs={12}>
@@ -69,8 +77,12 @@ export const CalendarPopover = (props: CalendarPopoverProps) => {
 							/>
 						</Grid>
 						<Grid item xs={12}>
-							<Button variant="text">Clear</Button>
-							<Button variant="text">OK</Button>
+							<Button variant="text" onClick={handleClose}>
+								Clear
+							</Button>
+							<Button variant="text" onClick={handleChange}>
+								OK
+							</Button>
 						</Grid>
 					</Grid>
 				</div>
@@ -79,4 +91,10 @@ export const CalendarPopover = (props: CalendarPopoverProps) => {
 	);
 };
 
-interface CalendarPopoverProps {}
+export type Dates = { from: Date; to: Date };
+
+interface CalendarPopoverProps {
+	show: boolean;
+	onChange: (dates: Dates) => void;
+	onCancel: () => void;
+}
