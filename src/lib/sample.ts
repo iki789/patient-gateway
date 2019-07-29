@@ -14,16 +14,17 @@ export class Sample extends Pagination implements IBase {
 	}
 
 	getAll(page: number): ISample[] {
-		page = page < 1 ? 1 : page;
-		this.items = this.samples;
-		return this.getItemsOnPage(page);
+		return this.samples;
 	}
 
-	getByPatientId(patientId: number | undefined, page: number, sort: Sort): ISample[] {
+	getByPatientId(patientId: number | undefined, page: number | null, sort: Sort): ISample[] {
 		if (!patientId) return [];
 		this.items = this.samples.filter((s) => s.patientId === patientId);
 		this.sort(this.items, sort);
-		return this.getItemsOnPage(page);
+		if (page) {
+			return this.getItemsOnPage(page);
+		}
+		return this.items;
 	}
 
 	private sort(samples: ISample[], sort: Sort): ISample[] {
