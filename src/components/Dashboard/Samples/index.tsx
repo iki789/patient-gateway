@@ -19,7 +19,7 @@ import momentJs from 'moment';
 import { IRootState } from '../../../store';
 import { SELECT_SAMPLE } from '../../../store/actionsTypes';
 import { ISample } from '../../../db/schema';
-import { Sample } from '../../../lib/sample';
+import { Sample, Sort } from '../../../lib/sample';
 import { Dates } from './calendarPopover';
 const CalendarPopover = React.lazy(() =>
 	import('./calendarPopover').then((module) => ({ default: module.CalendarPopover }))
@@ -64,6 +64,7 @@ const Samples: React.FC<PatientProps> = (props: PatientProps) => {
 		from: new Date(),
 		to: new Date()
 	});
+	const [ sort, setSort ] = useState<Sort>({ field: 'date', direction: 'desc' });
 	const [ showDatePicker, setShowDatePicker ] = useState(false);
 	const [ pager, setPager ] = useState<Pager>({
 		page: 1,
@@ -100,11 +101,7 @@ const Samples: React.FC<PatientProps> = (props: PatientProps) => {
 
 	const getSamples = (): ISample[] => {
 		if (props.patientId) {
-			if (datePicker.use) {
-				return sampleService.getBetweenDatesByPatient(datePicker.from, datePicker.to, props.patientId, pager.page);
-			} else {
-				return sampleService.getByPatient(props.patientId, pager.page);
-			}
+			return sampleService.getByPatientId(props.patientId, pager.page, sort);
 		}
 		return [];
 	};
