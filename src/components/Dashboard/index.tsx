@@ -1,13 +1,30 @@
 import React, { Component, Suspense } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
-import { Button, Container, Grid, AppBar, Paper, Toolbar, Typography, Theme, withStyles } from '@material-ui/core';
+import {
+	Button,
+	Container,
+	Grid,
+	IconButton,
+	AppBar,
+	Paper,
+	Toolbar,
+	Typography,
+	Theme,
+	withStyles
+} from '@material-ui/core';
+import { ShowChart } from '@material-ui/icons';
 import { Auth } from '../../lib/auth';
 import CircularProgress from '../UI/Loader';
 import { Patients } from './Patients';
+import { SamplesChart } from './Samples/chart';
 const Samples = React.lazy(() => import('./Samples').then((module) => ({ default: module.Samples })));
 const Variants = React.lazy(() => import('./Variants').then((module) => ({ default: module.Variants })));
 
-class Dashboard extends Component<IDashboard & RouteComponentProps> {
+class Dashboard extends Component<IDashboard & RouteComponentProps, IDashboardState> {
+	state: IDashboardState = {
+		showChart: false
+	};
+
 	componentDidMount() {
 		if (!Auth.isLoggedIn) {
 			this.props.history.push('/login');
@@ -44,8 +61,16 @@ class Dashboard extends Component<IDashboard & RouteComponentProps> {
 						Dr. {Auth && Auth.user ? Auth.user.name : ''}
 					</Typography>
 					<Grid container spacing={2}>
-						<Grid item xs={12}>
+						<Grid item>
 							<Patients />
+						</Grid>
+						<Grid item alignItems="center" style={{ display: 'flex' }}>
+							<IconButton onClick={() => this.setState({ showChart: !this.state.showChart })}>
+								<ShowChart className={this.state.showChart ? this.props.classes.activeChart : ''} />
+							</IconButton>
+						</Grid>
+						<Grid item xs={12}>
+							<SamplesChart showChart={this.state.showChart} />
 						</Grid>
 					</Grid>
 					<Grid container spacing={2}>
@@ -74,6 +99,10 @@ interface IDashboard {
 	classes: any;
 }
 
+interface IDashboardState {
+	showChart: boolean;
+}
+
 let styles = (theme: Theme) => {
 	return {
 		container: {
@@ -81,6 +110,9 @@ let styles = (theme: Theme) => {
 		},
 		paper: {
 			padding: theme.spacing(2)
+		},
+		activeChart: {
+			color: theme.palette.secondary.main
 		}
 	};
 };
