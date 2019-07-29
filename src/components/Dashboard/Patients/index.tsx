@@ -41,7 +41,7 @@ const Patients: React.FC<PatientProps> = (props: PatientProps) => {
 				className={classes.selectEmpty}
 			>
 				<MenuItem value="" disabled>
-					Patient
+					Select Patient
 				</MenuItem>
 				{patients.map((p) => (
 					<MenuItem value={p.id} key={p.id}>
