@@ -63,12 +63,10 @@ const Variants: React.FC<PatientProps> = (props: PatientProps) => {
 				return [];
 			}
 			variants = getVariants();
-			if (variants.length > 0) {
-				setVariants(variants);
-				setPager((p: Pager) => {
-					return { ...p, page: 1, total: variantService.items.length };
-				});
-			}
+			setVariants(variants);
+			setPager((p: Pager) => {
+				return { ...p, page: 1, total: variantService.items.length };
+			});
 		},
 		[ props.sampleId, sort, setPager, setVariants ]
 	);

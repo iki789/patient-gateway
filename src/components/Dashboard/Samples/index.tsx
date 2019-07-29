@@ -78,7 +78,6 @@ const Samples: React.FC<PatientProps> = (props: PatientProps) => {
 
 	useEffect(
 		() => {
-			console.log('');
 			function getSamples(): ISample[] {
 				if (props.patientId) {
 					return sampleService.getByPatientId(props.patientId, pager.page, sort);
@@ -86,10 +85,8 @@ const Samples: React.FC<PatientProps> = (props: PatientProps) => {
 				return [];
 			}
 			const samples = getSamples();
-			if (samples.length > 0) {
-				setPager({ ...pager, total: sampleService.items.length });
-				setSamples(samples);
-			}
+			setPager({ ...pager, total: sampleService.items.length });
+			setSamples(samples);
 		},
 		[ props.patientId, datePicker, sort ]
 	);
