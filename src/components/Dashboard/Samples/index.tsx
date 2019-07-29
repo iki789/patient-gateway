@@ -74,6 +74,7 @@ const Samples: React.FC<PatientProps> = (props: PatientProps) => {
 	useEffect(
 		() => {
 			let samples = getSamples();
+			console.log('');
 			if (samples.length > 1) {
 				setPager({ ...pager, total: sampleService.items.length });
 				setSamples(samples);
@@ -82,7 +83,7 @@ const Samples: React.FC<PatientProps> = (props: PatientProps) => {
 				setPager({ ...pager, page: 1, total: sampleService.items.length });
 			}
 		},
-		[ props.patientId ]
+		[ props.patientId, datePicker ]
 	);
 
 	useEffect(
@@ -97,8 +98,8 @@ const Samples: React.FC<PatientProps> = (props: PatientProps) => {
 
 	const getSamples = (): ISample[] => {
 		if (props.patientId) {
-			if (props.showDatePicker) {
-				// return sampleService.getBetweenDatesByPatient(fromDate, toDate, props.patientId, pager.page);
+			if (datePicker.use) {
+				return sampleService.getBetweenDatesByPatient(datePicker.from, datePicker.to, props.patientId, pager.page);
 			} else {
 				return sampleService.getByPatient(props.patientId, pager.page);
 			}
@@ -107,7 +108,6 @@ const Samples: React.FC<PatientProps> = (props: PatientProps) => {
 	};
 
 	const handleRowClick = (e: React.MouseEvent<HTMLElement>, id: number) => {
-		if (props.showDatePicker) return;
 		setSelectedSample(id);
 		props.onSelect(id);
 	};
@@ -135,22 +135,24 @@ const Samples: React.FC<PatientProps> = (props: PatientProps) => {
 		setShowDatePicker(false);
 	};
 
+	const datePickerButton = (
+		<IconButton style={{ marginTop: -8 }} onClick={() => setShowDatePicker(true)}>
+			<Alarm className={datePicker.use ? classes.activePicker : ''} />
+		</IconButton>
+	);
+
 	const header = (
 		<Grid container>
 			<Grid item style={{ flexGrow: 1 }}>
 				<Typography variant="h5">{props.title}</Typography>
 			</Grid>
-			<Grid item>
-				<IconButton style={{ marginTop: -8 }} onClick={() => setShowDatePicker(true)}>
-					<Alarm className={datePicker.use ? classes.activePicker : ''} />
-				</IconButton>
-			</Grid>
+			<Grid item>{datePickerButton}</Grid>
 		</Grid>
 	);
 
 	const dataTable = (
 		<div>
-			{props.title && !props.showDatePicker ? header : null}
+			{props.title || datePicker.use ? header : null}
 			<div className={classes.table}>
 				<Table>
 					<TableHead>
@@ -195,17 +197,19 @@ const Samples: React.FC<PatientProps> = (props: PatientProps) => {
 		</div>
 	);
 
+	const placeholderMessage = (
+		<Typography variant="h5" className={classes.placeholder}>
+			{!props.patientId ? 'Select patient to view samples' : ''}
+			{props.patientId && samples.length < 1 ? 'Patient has no samples' : ''}
+			{props.patientId && datePicker.use ? ` in current date range` : ''}
+
+			{props.patientId && datePicker.use ? datePickerButton : ''}
+		</Typography>
+	);
+
 	const placeholder = (
 		<Grid container justify="center" alignContent="center">
-			<Grid item>
-				<Typography variant="h5" className={classes.placeholder}>
-					{props.patientId ? (
-						`Patient has no samples${props.showDatePicker ? ' in current date range' : ''}`
-					) : (
-						'Select patient to view samples'
-					)}
-				</Typography>
-			</Grid>
+			<Grid item>{placeholderMessage}</Grid>
 		</Grid>
 	);
 
