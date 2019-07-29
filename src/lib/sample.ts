@@ -31,7 +31,11 @@ export class Sample extends Pagination implements IBase {
 
 	private sort(samples: ISample[], sort: Sort): ISample[] {
 		if (sort.field === 'date') {
-			samples.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+			samples.sort(
+				(a, b) =>
+					new Date(sort.direction === 'asc' ? a.date : b.date).getTime() -
+					new Date(sort.direction === 'asc' ? b.date : a.date).getTime()
+			);
 		}
 		if (sort.field === 'quality' || sort.field === 'sampleType') {
 			samples.sort((a: ISample, b: ISample) => {
@@ -48,7 +52,8 @@ export class Sample extends Pagination implements IBase {
 	}
 }
 
-export type Sort = { field: 'sampleType' | 'quality' | 'date'; direction: 'asc' | 'desc' };
+export type Sort = { field: SortFields; direction: 'asc' | 'desc' };
+export type SortFields = 'sampleType' | 'quality' | 'date';
 
 interface IBase {
 	getById: (id: number) => ISample;
