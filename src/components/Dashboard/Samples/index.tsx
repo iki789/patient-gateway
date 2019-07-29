@@ -177,7 +177,8 @@ const Samples: React.FC<PatientProps> = (props: PatientProps) => {
 						))}
 					</TableBody>
 				</Table>
-				<TablePagination
+			</div>
+			<TablePagination
 					rowsPerPageOptions={[ 5, 10, 25 ]}
 					component="div"
 					count={pager.total}
@@ -192,7 +193,6 @@ const Samples: React.FC<PatientProps> = (props: PatientProps) => {
 					onChangePage={handleChangePage}
 					onChangeRowsPerPage={handleChangePerPage}
 				/>
-			</div>
 		</div>
 	);
 
