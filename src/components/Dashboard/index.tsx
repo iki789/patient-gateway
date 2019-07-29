@@ -1,10 +1,11 @@
-import React, { Component } from 'react';
+import React, { Component, Suspense } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import { Button, Container, Grid, AppBar, Paper, Toolbar, Typography, Theme, withStyles } from '@material-ui/core';
 import { Auth } from '../../lib/auth';
+import CircularProgress from '../UI/Loader';
 import { Patients } from './Patients';
-import { Samples } from './Samples';
-import { Variants } from './Variants';
+const Samples = React.lazy(() => import('./Samples').then((module) => ({ default: module.Samples })));
+const Variants = React.lazy(() => import('./Variants').then((module) => ({ default: module.Variants })));
 
 class Dashboard extends Component<IDashboard & RouteComponentProps> {
 	componentDidMount() {
@@ -50,12 +51,16 @@ class Dashboard extends Component<IDashboard & RouteComponentProps> {
 					<Grid container spacing={2}>
 						<Grid item xs={12} md={4}>
 							<Paper className={this.props.classes.paper}>
-								<Samples title="Patient Samples" />
+								<Suspense fallback={<CircularProgress />}>
+									<Samples />
+								</Suspense>
 							</Paper>
 						</Grid>
 						<Grid item xs={12} md={8}>
 							<Paper className={this.props.classes.paper}>
-								<Variants />
+								<Suspense fallback={<CircularProgress />}>
+									<Variants />
+								</Suspense>
 							</Paper>
 						</Grid>
 					</Grid>
