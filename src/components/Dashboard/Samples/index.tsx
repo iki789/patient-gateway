@@ -74,8 +74,7 @@ const Samples: React.FC<PatientProps> = (props: PatientProps) => {
 	useEffect(
 		() => {
 			let samples = getSamples();
-			console.log('');
-			if (samples.length > 1) {
+			if (samples.length > 0) {
 				setPager({ ...pager, total: sampleService.items.length });
 				setSamples(samples);
 			} else {
@@ -89,7 +88,7 @@ const Samples: React.FC<PatientProps> = (props: PatientProps) => {
 	useEffect(
 		() => {
 			const samples: ISample[] = getSamples();
-			if (samples.length > 1) {
+			if (samples.length > 0) {
 				setSamples(samples);
 			}
 		},
