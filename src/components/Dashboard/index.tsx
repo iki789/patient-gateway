@@ -13,10 +13,6 @@ class Dashboard extends Component<IDashboard & RouteComponentProps> {
 		}
 	}
 
-	hanldePatientSelect = (patientId: number) => {
-		console.log(patientId);
-	};
-
 	render() {
 		return (
 			<React.Fragment>
@@ -52,7 +48,7 @@ class Dashboard extends Component<IDashboard & RouteComponentProps> {
 						</Grid>
 						<Grid item xs={12} md={8}>
 							<Paper className={this.props.classes.paper}>
-								<Variants onSelect={this.hanldePatientSelect} />
+								<Variants />
 							</Paper>
 						</Grid>
 					</Grid>

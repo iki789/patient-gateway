@@ -182,7 +182,6 @@ const Variants: React.FC<PatientProps> = (props: PatientProps) => {
 
 interface PatientProps {
 	sampleId: number | null;
-	onSelect: (id: number) => void;
 }
 
 const mapStateToProps = (state: IRootState) => {
