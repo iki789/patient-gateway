@@ -55,13 +55,19 @@ const Variants: React.FC<PatientProps> = (props: PatientProps) => {
 
 	useEffect(
 		() => {
-			const variants: IVariant[] = getVariants();
+			let variants: IVariant[] = [];
+			function getVariants() {
+				if (props.sampleId) {
+					return variantService.getBySampleId(props.sampleId, pager.page, sort);
+				}
+				return [];
+			}
+			variants = getVariants();
 			if (variants.length > 0) {
-				setPager({ ...pager, page: 1, total: variantService.items.length });
 				setVariants(variants);
-			} else {
-				setVariants(variants);
-				setPager({ ...pager, page: 1, total: variantService.items.length });
+				setPager((p: Pager) => {
+					return { ...p, page: 1, total: variantService.items.length };
+				});
 			}
 		},
 		[ props.sampleId, sort, setPager, setVariants ]
@@ -69,20 +75,20 @@ const Variants: React.FC<PatientProps> = (props: PatientProps) => {
 
 	useEffect(
 		() => {
-			const variants: IVariant[] = getVariants();
+			let variants: IVariant[] = [];
+			function getVariants() {
+				if (props.sampleId) {
+					return variantService.getBySampleId(props.sampleId, pager.page, sort);
+				}
+				return [];
+			}
+			variants = getVariants();
 			if (variants.length > 0) {
 				setVariants(variants);
 			}
 		},
 		[ pager.page, pager.perPage ]
 	);
-
-	const getVariants = (): IVariant[] => {
-		if (props.sampleId) {
-			return variantService.getBySampleId(props.sampleId, pager.page, sort);
-		}
-		return [];
-	};
 
 	const handleSort = (e: React.MouseEvent<HTMLElement>, field: 'alleleFrequency' | 'mutationType') => {
 		setSort({
