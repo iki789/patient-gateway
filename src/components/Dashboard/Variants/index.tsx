@@ -56,7 +56,7 @@ const Variants: React.FC<PatientProps> = (props: PatientProps) => {
 	useEffect(
 		() => {
 			const variants: IVariant[] = getVariants();
-			if (variants.length > 1) {
+			if (variants.length > 0) {
 				setPager({ ...pager, page: 1, total: variantService.items.length });
 				setVariants(variants);
 			} else {
@@ -70,7 +70,7 @@ const Variants: React.FC<PatientProps> = (props: PatientProps) => {
 	useEffect(
 		() => {
 			const variants: IVariant[] = getVariants();
-			if (variants.length > 1) {
+			if (variants.length > 0) {
 				setVariants(variants);
 			}
 		},
