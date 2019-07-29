@@ -12,6 +12,7 @@
 		"moment": "^2.24.0",
 		"react": "^16.8.6",
 		"react-app-polyfill": "^1.0.1",
+		"react-chartjs-2": "^2.7.6",
 		"react-dev-utils": "^9.0.1",
 		"react-dom": "^16.8.6",
 		"react-redux": "^7.1.0",
@@ -27,25 +28,12 @@
 		"extends": "react-app"
 	},
 	"browserslist": {
-		"production": [
-			">0.2%",
-			"not dead",
-			"not op_mini all"
-		],
-		"development": [
-			"last 1 chrome version",
-			"last 1 firefox version",
-			"last 1 safari version"
-		]
+		"production": [ ">0.2%", "not dead", "not op_mini all" ],
+		"development": [ "last 1 chrome version", "last 1 firefox version", "last 1 safari version" ]
 	},
 	"jest": {
-		"collectCoverageFrom": [
-			"src/**/*.{js,jsx,ts,tsx}",
-			"!src/**/*.d.ts"
-		],
-		"setupFiles": [
-			"react-app-polyfill/jsdom"
-		],
+		"collectCoverageFrom": [ "src/**/*.{js,jsx,ts,tsx}", "!src/**/*.d.ts" ],
+		"setupFiles": [ "react-app-polyfill/jsdom" ],
 		"setupFilesAfterEnv": [],
 		"testMatch": [
 			"<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}",
@@ -57,36 +45,17 @@
 			"^.+\\.css$": "<rootDir>/config/jest/cssTransform.js",
 			"^(?!.*\\.(js|jsx|ts|tsx|css|json)$)": "<rootDir>/config/jest/fileTransform.js"
 		},
-		"transformIgnorePatterns": [
-			"[/\\\\]node_modules[/\\\\].+\\.(js|jsx|ts|tsx)$",
-			"^.+\\.module\\.(css|sass|scss)$"
-		],
+		"transformIgnorePatterns": [ "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|ts|tsx)$", "^.+\\.module\\.(css|sass|scss)$" ],
 		"modulePaths": [],
 		"moduleNameMapper": {
 			"^react-native$": "react-native-web",
 			"^.+\\.module\\.(css|sass|scss)$": "identity-obj-proxy"
 		},
-		"moduleFileExtensions": [
-			"web.js",
-			"js",
-			"web.ts",
-			"ts",
-			"web.tsx",
-			"tsx",
-			"json",
-			"web.jsx",
-			"jsx",
-			"node"
-		],
-		"watchPlugins": [
-			"jest-watch-typeahead/filename",
-			"jest-watch-typeahead/testname"
-		]
+		"moduleFileExtensions": [ "web.js", "js", "web.ts", "ts", "web.tsx", "tsx", "json", "web.jsx", "jsx", "node" ],
+		"watchPlugins": [ "jest-watch-typeahead/filename", "jest-watch-typeahead/testname" ]
 	},
 	"babel": {
-		"presets": [
-			"react-app"
-		]
+		"presets": [ "react-app" ]
 	},
 	"devDependencies": {
 		"@types/react-redux": "^7.1.1",
@@ -98,6 +67,7 @@
 		"@types/moment": "^2.13.0",
 		"@types/node": "12.6.8",
 		"@types/react": "16.8.23",
+		"@types/react-chartjs-2": "^2.5.7",
 		"@types/react-dom": "16.8.5",
 		"@types/react-router-dom": "^4.3.4",
 		"@types/redux": "^3.6.0",
