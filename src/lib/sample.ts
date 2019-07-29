@@ -20,33 +20,38 @@ export class Sample extends Pagination implements IBase {
 		return this.getItemsOnPage(page);
 	}
 
-	getByPatient(patientId: number | undefined, page: number): ISample[] {
+	getByPatientId(patientId: number | undefined, page: number, sort: Sort): ISample[] {
 		if (!patientId) return [];
 		let samples: ISample[] = [];
 		this.items = this.samples;
 		samples = this.items = this.samples.filter((s) => s.patientId === patientId);
-		this.sortByDate(samples);
+		this.sort(samples, sort);
 		return this.getItemsOnPage(page);
 	}
 
-	getBetweenDatesByPatient(from: Date, to: Date, patientId: number, page: number): ISample[] {
-		const fromTime = moment(from);
-		const toTime = moment(to);
-		this.items = this.samples.filter((s) => {
-			let t = moment(s.date);
-			return t >= fromTime && t <= toTime && s.patientId === patientId;
-		});
-		return this.sortByDate(this.getItemsOnPage(page));
-	}
-
-	sortByDate(samples: ISample[]) {
-		return samples.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+	private sort(samples: ISample[], sort: Sort): ISample[] {
+		if (sort.field === 'date') {
+			samples.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+		}
+		if (sort.field === 'quality' || sort.field === 'sampleType') {
+			samples.sort((a: ISample, b: ISample) => {
+				if (a[sort.field] > b[sort.field]) {
+					return sort.direction === 'asc' ? 1 : -1;
+				}
+				if (a[sort.field] < b[sort.field]) {
+					return sort.direction === 'asc' ? -1 : 1;
+				}
+				return 0;
+			});
+		}
+		return samples;
 	}
 }
 
+export type Sort = { field: 'sampleType' | 'quality' | 'date'; direction: 'asc' | 'desc' };
+
 interface IBase {
 	getById: (id: number) => ISample;
-	getByPatient: (id: number, page: number) => ISample[];
-	getBetweenDatesByPatient: (from: Date, to: Date, patientId: number, page: number) => ISample[];
+	getByPatientId: (id: number, page: number, sort: Sort) => ISample[];
 	getAll: (page: number) => ISample[];
 }
