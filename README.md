@@ -5,18 +5,18 @@
 
 Patient Gateway is a front-end dashboard built to help doctors monitor they patients. This enables doctors to view they patients, they blood samples and variants.
 
-- View your patients, samples and varients at a glance.
-  ![Demo GIF](https://i.imgur.com/H7j0m9i.gif)
+##### View your patients, samples and varients at a glance.
+  ![GIF](https://i.imgur.com/8bu9LSO.gif)
 
-##### Improvements:
-  - View samples within date range
-   ![DateRangeGIF](https://i.imgur.com/z8clyWt.gif)
+## Improvements:
   - Sort your data 
   - Form validation
   - Server-side pagination
   - Lazy load component for a quick First Meaningful Paint 
+  - View samples within date range
+   ![DateRangeGIF](https://i.imgur.com/z8clyWt.gif)
 
-### Tech
+## Tech
 
 Patient Gateway uses a number of open source projects to work properly:
 
@@ -27,7 +27,7 @@ Patient Gateway uses a number of open source projects to work properly:
 * [Webpack] - a module bundler
 
 
-### Installation
+## Installation
 
 Patient Gateway requires [Node.js](https://nodejs.org/) v4+ and [TypeScript]  to run.
 
@@ -46,7 +46,7 @@ Start development server on http://localhost:3000 and view it in the browser.
 ```sh
 $ npm start
 ```
-### Deployment
+## Deployment
 
 To build for production environments.
 
