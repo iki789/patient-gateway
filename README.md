@@ -58,7 +58,7 @@ Patient Gateway is ready to be deployed!
 >You say the build is 24Mbs😱
 This is because a database dump is bundled with webpack. This will be the largest chunk located in `./build/static/js`
 
-You can deploy finally the build on https://localhost:5000 using:
+You can deploy the build on https://localhost:5000 using:
 
 ```sh
 npm install -g serve
