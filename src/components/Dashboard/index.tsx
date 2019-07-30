@@ -16,7 +16,7 @@ import { ShowChart } from '@material-ui/icons';
 import { Auth } from '../../lib/auth';
 import CircularProgress from '../UI/Loader';
 import { Patients } from './Patients';
-import { SamplesChart } from './Samples/chart';
+const SamplesChart = React.lazy(() => import('./Samples/chart').then((module) => ({ default: module.SamplesChart })));
 const Samples = React.lazy(() => import('./Samples').then((module) => ({ default: module.Samples })));
 const Variants = React.lazy(() => import('./Variants').then((module) => ({ default: module.Variants })));
 
@@ -70,7 +70,9 @@ class Dashboard extends Component<IDashboard & RouteComponentProps, IDashboardSt
 							</IconButton>
 						</Grid>
 						<Grid item xs={12}>
-							<SamplesChart showChart={this.state.showChart} />
+							<Suspense fallback={<div />}>
+								<SamplesChart showChart={this.state.showChart} />
+							</Suspense>
 						</Grid>
 					</Grid>
 					<Grid container spacing={2}>
