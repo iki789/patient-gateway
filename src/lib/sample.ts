@@ -1,5 +1,6 @@
 import { Pagination } from './pagination';
 import { Samples as SamplesDB, ISample } from '../db/index';
+import moment from 'moment';
 
 export class Sample extends Pagination implements IBase {
 	samples: ISample[] = SamplesDB;
@@ -13,13 +14,25 @@ export class Sample extends Pagination implements IBase {
 		return this.samples.filter((s) => s.id === id)[0];
 	}
 
-	getAll(page: number): ISample[] {
+	getAll(): ISample[] {
 		return this.samples;
 	}
 
-	getByPatientId(patientId: number | undefined, page: number | null, sort: Sort): ISample[] {
+	getByPatientId(
+		patientId: number | undefined,
+		page: number | null,
+		sort: Sort,
+		between?: BetweenDates | null
+	): ISample[] {
 		if (!patientId) return [];
-		this.items = this.samples.filter((s) => s.patientId === patientId);
+		this.items = this.samples.filter((s) => {
+			if (between) {
+				return (
+					moment(s.date) >= moment(between.from) && moment(s.date) <= moment(between.to) && s.patientId === patientId
+				);
+			}
+			return s.patientId === patientId;
+		});
 		this.sort(this.items, sort);
 		if (page) {
 			return this.getItemsOnPage(page);
@@ -52,6 +65,7 @@ export class Sample extends Pagination implements IBase {
 
 export type Sort = { field: SortFields; direction: 'asc' | 'desc' };
 export type SortFields = 'sampleType' | 'quality' | 'date';
+type BetweenDates = { from: Date; to: Date };
 
 interface IBase {
 	getById: (id: number) => ISample;
