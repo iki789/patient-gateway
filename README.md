@@ -5,12 +5,12 @@
 
 Patient Gateway is a front-end dashboard built to help doctors monitor they patients. This enables doctors to view they patients, they blood samples and variants.
 
-View your patients, samples and varients at a glance.
-![Demo GIF](https://i.imgur.com/H7j0m9i.gif)
+- View your patients, samples and varients at a glance.
+  ![Demo GIF](https://i.imgur.com/H7j0m9i.gif)
 
 ##### Improvements:
   - View samples within date range
-   ![Demo GIF](https://i.imgur.com/z8clyWt.gif)
+   ![DateRangeGIF](https://i.imgur.com/z8clyWt.gif)
   - Sort your data 
   - Form validation
   - Server-side pagination
