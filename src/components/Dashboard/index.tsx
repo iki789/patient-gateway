@@ -60,11 +60,11 @@ class Dashboard extends Component<IDashboard & RouteComponentProps, IDashboardSt
 					<Typography display="inline" variant="subtitle2">
 						Dr. {Auth && Auth.user ? Auth.user.name : ''}
 					</Typography>
-					<Grid container spacing={2}>
+					<Grid container spacing={2} alignItems="center">
 						<Grid item>
 							<Patients />
 						</Grid>
-						<Grid item alignItems="center" style={{ display: 'flex' }}>
+						<Grid item>
 							<IconButton onClick={() => this.setState({ showChart: !this.state.showChart })}>
 								<ShowChart className={this.state.showChart ? this.props.classes.activeChart : ''} />
 							</IconButton>
