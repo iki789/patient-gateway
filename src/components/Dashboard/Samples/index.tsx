@@ -80,7 +80,12 @@ const Samples: React.FC<PatientProps> = (props: PatientProps) => {
 		() => {
 			function getSamples(): ISample[] {
 				if (props.patientId) {
-					return sampleService.getByPatientId(props.patientId, pager.page, sort);
+					return sampleService.getByPatientId(
+						props.patientId,
+						pager.page,
+						sort,
+						datePicker.use ? { from: datePicker.from, to: datePicker.to } : null
+					);
 				}
 				return [];
 			}
@@ -95,7 +100,12 @@ const Samples: React.FC<PatientProps> = (props: PatientProps) => {
 		() => {
 			function getSamples(): ISample[] {
 				if (props.patientId) {
-					return sampleService.getByPatientId(props.patientId, pager.page, sort);
+					return sampleService.getByPatientId(
+						props.patientId,
+						pager.page,
+						sort,
+						datePicker.use ? { from: datePicker.from, to: datePicker.to } : null
+					);
 				}
 				return [];
 			}
