@@ -30,7 +30,7 @@ class SamplesChart extends React.Component<ChartProps, ChartState> {
 	}
 
 	componentDidUpdate(prevProps: ChartProps) {
-		if (prevProps.patientId !== this.props.patientId || prevProps.showChart != this.props.showChart) {
+		if (prevProps.patientId !== this.props.patientId || prevProps.showChart !== this.props.showChart) {
 			if (this.props.patientId !== null) {
 				this.setState(
 					{
