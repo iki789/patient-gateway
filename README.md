@@ -24,6 +24,7 @@ Patient Gateway uses a number of open source projects to work properly:
 * [TypeScript] - a superset of JavaScript
 * [Redux] - elegent state management library
 * [Material UI] - great material UI components for modern web apps
+* [ChartJs] - canvas based charting library
 * [Webpack] - a module bundler
 
 
@@ -80,6 +81,7 @@ License
    [Material UI]: <https://material-ui.com/>
    [ReactJs]: <https://reactjs.org/>
    [Redux]: <https://react-redux.js.org/>
+   [ChartJs]: <https://www.chartjs.org/>
    [Webpack]: <https://webpack.js.org/>
    [No License]: <https://choosealicense.com/no-permission/>
 
