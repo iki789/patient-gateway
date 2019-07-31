@@ -1,7 +1,8 @@
-[![N|Solid](https://i.imgur.com/zd4cZiz.png)]()
+
+![N|Solid](https://i.imgur.com/zd4cZiz.png)]()
 # Patient Gateway
 
-![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)
+![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=
 
 Patient Gateway is a front-end dashboard built to help doctors monitor they patients. This enables doctors to view they patients, they blood samples and variants.
 
@@ -75,7 +76,7 @@ username: ktw2
 password: hKvLafc'Nmsi
 
 username: ldw4
-password: eaI'guieMClo
+password: KLp=4%RNU)bz
 ```
 
 License
