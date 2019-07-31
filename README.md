@@ -65,6 +65,18 @@ npm install -g serve
 serve -s build
 ```
 
+#### Test Users
+
+```
+username: clw0
+password: eaI'guieMClo
+
+username: ktw2
+password: hKvLafc'Nmsi
+
+username: ldw4
+password: eaI'guieMClo
+```
 
 License
 ----
