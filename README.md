@@ -1,5 +1,5 @@
 
-![N|Solid](https://i.imgur.com/zd4cZiz.png)]()
+[![N|Solid](https://i.imgur.com/zd4cZiz.png)]()
 # Patient Gateway
 
 ![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=
