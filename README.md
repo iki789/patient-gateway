@@ -2,7 +2,7 @@
 [![N|Solid](https://i.imgur.com/zd4cZiz.png)]()
 # Patient Gateway
 
-![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=
+[![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=)]()
 
 Patient Gateway is a front-end dashboard built to help doctors monitor they patients. This enables doctors to view they patients, they blood samples and variants.
 
